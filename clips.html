@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DJ Bingo clip setup</title>
+<link rel="icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Monoton&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .cs { display: grid; grid-template-columns: 300px 1fr; gap: 16px; }
+  @media (max-width: 900px) { .cs { grid-template-columns: 1fr; } }
+  .list { max-height: 80vh; overflow: auto; padding: 8px; }
+  .list h4 { margin: 10px 4px 4px; font-size: .85rem; color: var(--gold); }
+  .list div { padding: 6px 8px 6px 22px; border-radius: 8px; cursor: pointer; font-size: .85rem; position: relative; }
+  .list div::before { content: ''; position: absolute; left: 7px; top: 11px; width: 8px; height: 8px; border-radius: 50%; background: #4a3f78; }
+  .list div.done::before { background: #5ef38c; } .list div.none::before { background: #ff7a7a; }
+  .list div.cur { background: var(--pink); }
+  .quote { font-family: 'Bebas Neue', system-ui, sans-serif; font-size: 2.2rem; line-height: 1.1; }
+  textarea { width: 100%; font-size: 1rem; padding: 8px; border-radius: 10px; border: 1px solid var(--line); background: #110d22; color: #fff; }
+  .badge { background: #ffcf4a; color: #000; border-radius: 6px; padding: 2px 8px; font-size: .8rem; font-weight: 700; }
+  .results { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; margin-top: 8px; }
+  .results div { background: #221b3d; border: 2px solid var(--line); border-radius: 10px; overflow: hidden; cursor: pointer; font-size: .8rem; }
+  .results div.sel { border-color: var(--pink); }
+  .results img { width: 100%; display: block; } .results p { margin: 4px 6px 6px; }
+  #ytbox { aspect-ratio: 16 / 9; max-width: 720px; background: #000; border-radius: 12px; overflow: hidden; }
+  #ytbox iframe { width: 100%; height: 100%; }
+  .times b { font-family: 'Bebas Neue', system-ui, sans-serif; font-size: 1.6rem; color: var(--gold); min-width: 3.5em; display: inline-block; }
+  button.sm { padding: 8px 12px; font-size: .9rem; }
+</style>
+</head><body><div class="wrap">
+<h1 class="logo">Clip setup <small>movie quotes</small></h1>
+<div class="panel row" id="keyRow" style="display:none">
+  <span>Paste your YouTube API key (same one as the host screen):</span>
+  <input id="key" style="flex:1"><button id="saveKey">Save</button>
+</div>
+<div class="cs">
+  <div class="panel list" id="list"></div>
+  <div>
+    <div class="panel">
+      <div class="row" style="justify-content:space-between"><span id="movie" class="muted"></span><span id="prog" class="muted"></span></div>
+      <div class="quote" id="quote"></div>
+      <div id="who" class="muted"></div>
+      <p id="checkMsg" style="display:none"><span class="badge">Check wording</span> Listen to the clip and fix the words below if they're off.</p>
+      <label>Quote as it should show on the TV</label><textarea id="text" rows="2"></textarea>
+    </div>
+    <div class="panel">
+      <div class="row"><input id="q" style="flex:1"><button class="sm" id="search">Search YouTube</button></div>
+      <div class="row" style="margin-top:8px"><input id="link" style="flex:1" placeholder="...or paste a YouTube link"><button class="sm alt" id="useLink">Use link</button></div>
+      <div class="results" id="results"></div>
+      <div class="msg" id="msg"></div>
+    </div>
+    <div class="panel">
+      <div id="ytbox"><div id="yt"></div></div>
+      <p class="muted">Play the video and drag the bar to just before the line, then press <b>Start here</b>. Let it play to just after the line and press <b>End here</b>.</p>
+      <div class="row times">
+        <span>Start <b id="s">-</b></span><button class="sm" id="setS">Start here</button><button class="sm alt" id="sMinus">-0.5s</button><button class="sm alt" id="sPlus">+0.5s</button>
+        <span style="margin-left:16px">End <b id="e">-</b></span><button class="sm" id="setE">End here</button><button class="sm alt" id="eMinus">-0.5s</button><button class="sm alt" id="ePlus">+0.5s</button>
+      </div>
+      <p class="row">
+        <button class="alt" id="preview">Preview clip</button>
+        <button id="save">Save and next</button>
+        <button class="alt" id="none">No good clip</button>
+      </p>
+    </div>
+    <div class="panel">
+      <b>When you're done (or want to send what you have so far)</b>
+      <p class="row"><button class="alt" id="copy">Copy my picks</button><button class="alt" id="dl">Download my picks</button></p>
+      <p class="muted">Your picks save in this browser as you go. Copy them and paste them to Claude, or attach the downloaded file, and they get added to the game.</p>
+    </div>
+  </div>
+</div>
+</div>
+<script src="songs.js"></script><script src="common.js"></script><script src="quotes.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const S = JSON.parse(localStorage.getItem('djb_settings') || '{}');
+const picks = Object.assign({}, CLIPS, JSON.parse(localStorage.getItem('djb_clips') || '{}'));
+const savePicks = () => localStorage.setItem('djb_clips', JSON.stringify(picks));
+const set = QUOTE_SETS[0];
+const items = set.movies.flatMap(([title, year, qs]) => qs.map(([text, who, search, check]) => ({ title, year, text, who, search, check, key: title + '|' + text })));
+let i = Math.max(0, items.findIndex(x => !picks[x.key])), vid = null, s = null, e = null, player = null, stopAt = null;
+
+if (!S.key) $('keyRow').style.display = '';
+$('saveKey').onclick = () => { S.key = $('key').value.trim(); localStorage.setItem('djb_settings', JSON.stringify(S)); $('keyRow').style.display = 'none'; };
+
+function drawList() {
+  let h = '', last = '';
+  items.forEach((x, n) => {
+    if (x.title !== last) { h += `<h4>${esc(x.title)} (${x.year})</h4>`; last = x.title; }
+    const p = picks[x.key], cls = (p ? (p.none ? 'none' : 'done') : '') + (n === i ? ' cur' : '');
+    h += `<div class="${cls}" data-n="${n}">${esc(p && p.t || x.text)}</div>`;
+  });
+  $('list').innerHTML = h;
+  const done = items.filter(x => picks[x.key]).length;
+  $('prog').textContent = `${done} of ${items.length} done`;
+}
+$('list').onclick = ev => { const d = ev.target.closest('[data-n]'); if (d) { i = +d.dataset.n; show(); } };
+
+const fmt = t => t == null ? '-' : `${Math.floor(t / 60)}:${(t % 60).toFixed(1).padStart(4, '0')}`;
+function times() { $('s').textContent = fmt(s); $('e').textContent = fmt(e); }
+
+function show() {
+  const x = items[i], p = picks[x.key] || {};
+  $('movie').textContent = `${x.title} (${x.year})`;
+  $('quote').textContent = p.t || x.text; $('text').value = p.t || x.text;
+  $('who').textContent = x.who;
+  $('checkMsg').style.display = x.check ? '' : 'none';
+  $('q').value = x.search; $('link').value = ''; $('msg').textContent = ''; $('results').innerHTML = '';
+  vid = p.v || null; s = p.s ?? null; e = p.e ?? null; times();
+  if (vid) loadVid(vid, s || 0); else if (S.key) search();
+  drawList();
+  const cur = $('list').querySelector('.cur'); if (cur) cur.scrollIntoView({ block: 'nearest' });
+}
+
+async function search() {
+  const q = $('q').value.trim(); if (!q) return;
+  if (!S.key) { $('msg').textContent = 'Add your YouTube key at the top first, or paste a link.'; return; }
+  const k = 'djb_cs_' + q;
+  let items2 = JSON.parse(localStorage.getItem(k) || 'null');
+  if (!items2) {
+    $('msg').textContent = 'Searching...';
+    try {
+      const r = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=6&q=' + encodeURIComponent(q) + '&key=' + encodeURIComponent(S.key));
+      const j = await r.json(); if (j.error) throw new Error(j.error.message);
+      items2 = j.items.map(x => ({ id: x.id.videoId, title: x.snippet.title, ch: x.snippet.channelTitle, img: x.snippet.thumbnails.medium.url }));
+      localStorage.setItem(k, JSON.stringify(items2));
+    } catch (err) { $('msg').textContent = 'Search failed: ' + err.message; return; }
+  }
+  $('msg').textContent = items2.length ? '' : 'No results. Try different words or paste a link.';
+  $('results').innerHTML = items2.map(x => `<div data-id="${x.id}" class="${x.id === vid ? 'sel' : ''}"><img src="${x.img}" alt=""><p>${x.title}<br><span class="muted">${esc(x.ch)}</span></p></div>`).join('');
+}
+$('search').onclick = search;
+$('q').onkeydown = ev => { if (ev.key === 'Enter') search(); };
+$('results').onclick = ev => {
+  const d = ev.target.closest('[data-id]'); if (!d) return;
+  [...$('results').children].forEach(c => c.classList.toggle('sel', c === d));
+  s = e = null; times(); loadVid(d.dataset.id, 0);
+};
+$('useLink').onclick = () => {
+  const m = $('link').value.match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([\w-]{11})/);
+  if (!m) { $('msg').textContent = "That doesn't look like a YouTube link."; return; }
+  s = e = null; times(); loadVid(m[1], 0);
+};
+
+function loadVid(id, at) {
+  vid = id;
+  if (player && player.loadVideoById) { player.cueVideoById({ videoId: id, startSeconds: at }); return; }
+  window.onYouTubeIframeAPIReady = () => {
+    player = new YT.Player('yt', { videoId: vid, playerVars: { start: Math.floor(at), rel: 0, playsinline: 1 },
+      events: { onError: () => { $('msg').textContent = "That video won't play here. Pick another result."; } } });
+  };
+  if (!document.querySelector('script[src*="iframe_api"]')) {
+    const t = document.createElement('script'); t.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(t);
+  }
+}
+const now = () => Math.round(player.getCurrentTime() * 2) / 2;
+$('setS').onclick = () => { if (!player) return; s = now(); if (e != null && e <= s) e = null; times(); };
+$('setE').onclick = () => { if (!player) return; e = now(); times(); };
+$('sMinus').onclick = () => { if (s != null) { s = Math.max(0, s - .5); times(); } };
+$('sPlus').onclick = () => { if (s != null) { s += .5; times(); } };
+$('eMinus').onclick = () => { if (e != null) { e -= .5; times(); } };
+$('ePlus').onclick = () => { if (e != null) { e += .5; times(); } };
+$('preview').onclick = () => {
+  if (!player || s == null) { $('msg').textContent = 'Set a start first.'; return; }
+  const end = e ?? s + 8;
+  player.seekTo(s, true); player.playVideo();
+  clearInterval(stopAt);
+  stopAt = setInterval(() => { if (player.getCurrentTime() >= end) { player.pauseVideo(); clearInterval(stopAt); } }, 100);
+};
+
+function next() {
+  const n = items.findIndex((x, k) => k > i && !picks[x.key]);
+  const m = n >= 0 ? n : items.findIndex(x => !picks[x.key]);
+  if (m >= 0) { i = m; show(); } else { drawList(); $('msg').textContent = 'All done! Copy or download your picks below.'; }
+}
+$('save').onclick = () => {
+  if (!vid || s == null) { $('msg').textContent = 'Pick a video and press Start here first.'; return; }
+  const x = items[i], t = $('text').value.trim(), p = { v: vid, s, e: e ?? s + 8 };
+  if (t && t !== x.text) p.t = t;
+  picks[x.key] = p; savePicks(); if (player) player.pauseVideo(); next();
+};
+$('none').onclick = () => {
+  const x = items[i], t = $('text').value.trim();
+  picks[x.key] = t && t !== x.text ? { none: 1, t } : { none: 1 }; savePicks(); if (player) player.pauseVideo(); next();
+};
+
+const exportText = () => JSON.stringify(picks, null, 1);
+$('copy').onclick = () => navigator.clipboard.writeText(exportText()).then(() => $('copy').textContent = 'Copied!');
+$('dl').onclick = () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([exportText()], { type: 'application/json' }));
+  a.download = 'dj-bingo-clips.json'; a.click();
+};
+
+show();
+</script>
+</body></html>
