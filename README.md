@@ -18,7 +18,8 @@ QR codes are made with qrcode-generator by Kazuhiko Arase (MIT license). The fon
 5. When a round is finished, press **Start next round**.
 6. When someone calls bingo, type their card number under **Check a bingo**. The app shows their card with every song played so far highlighted. A winning card gets confetti and an airhorn.
 
-- **Keys on the host:** Space next song, R replay, V reveal, F full screen.
+- **Keys on the host:** Space next song, R replay, S stop, V reveal, F full screen.
+- **Stopping:** each song stops by itself when the countdown ends. **Stop** ends it early.
 - **Sound effects:** the record scratch and airhorn are made in the browser and can be turned off on the setup screen.
 - **Screen sleep:** the host and player screens stay awake during a game where the browser supports it.
 - **Saving:** a game survives a refresh. **New game** clears it.

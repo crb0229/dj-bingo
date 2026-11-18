@@ -57,12 +57,13 @@
         <div class="row" style="justify-content:center;margin-top:12px">
           <button id="next">Play first song</button>
           <button class="alt" id="replay">Replay</button>
+          <button class="alt" id="stop">Stop</button>
           <button class="alt" id="reveal">Reveal</button>
           <button class="alt" id="wrong" title="Plays a different YouTube match">Wrong song</button>
           <a class="btn alt" id="ytm" target="_blank" rel="noopener">Open in YouTube Music</a>
           <button id="nextRound">Start next round</button>
         </div>
-        <p class="keys">Keys: <b>Space</b> next song &nbsp; <b>R</b> replay &nbsp; <b>V</b> reveal &nbsp; <b>F</b> full screen</p>
+        <p class="keys">Keys: <b>Space</b> next song &nbsp; <b>R</b> replay &nbsp; <b>V</b> reveal &nbsp; <b>S</b> stop &nbsp; <b>F</b> full screen</p>
       </div>
       <div class="panel"><b>Called so far</b> <span class="muted" id="count"></span><div class="board" id="called" style="margin-top:8px"></div></div>
     </div>
@@ -158,7 +159,7 @@ function render() {
   $('next').textContent = R.pos ? 'Next song' : 'Play first song';
   $('next').disabled = R.pos >= R.order.length;
   $('nextRound').style.display = G.r < cats.length - 1 ? '' : 'none';
-  $('replay').disabled = $('reveal').disabled = $('wrong').disabled = !s;
+  $('replay').disabled = $('stop').disabled = $('reveal').disabled = $('wrong').disabled = !s;
   $('ytm').style.display = s ? '' : 'none';
   if (s) $('ytm').href = 'https://music.youtube.com/search?q=' + encodeURIComponent(cat.query(s));
   const shown = R.order.slice(0, R.pos - (revealed ? 0 : 1)).reverse();
@@ -180,12 +181,15 @@ function startClip() {
     left--;
     $('timer').textContent = left > 0 ? left : '';
     if (left <= 0) {
-      stopClip();
+      stopClip(); pauseSong();
+      if (S.key && S.sfx) sfxScratch();
       if (!S.key) $('ytMsg').textContent = 'Stop the song';
       if (!revealed) { revealed = true; render(); }
     }
   }, 1000);
 }
+function pauseSong() { clipStarted = false; clearTimeout(startWatch); if (player && player.pauseVideo) player.pauseVideo(); }
+function stopSong() { if (!cur()) return; pauseSong(); stopClip(); if (!revealed) { revealed = true; render(); } }
 function stopClip() {
   clearInterval(tick); $('deck').classList.remove('spin'); $('timer').textContent = '';
   const fg = $('ringfg'); fg.style.transition = 'none'; fg.style.strokeDasharray = RING; fg.style.strokeDashoffset = 0;
@@ -210,6 +214,7 @@ function fullScreen() { document.fullscreenElement ? document.exitFullscreen() :
 $('next').onclick = nextSong;
 $('replay').onclick = replay;
 $('reveal').onclick = reveal;
+$('stop').onclick = stopSong;
 $('fs').onclick = fullScreen;
 $('nextRound').onclick = () => {
   if (!confirm(`Finish round ${G.r + 1} and start round ${G.r + 2}?`)) return;
@@ -227,6 +232,7 @@ document.addEventListener('keydown', e => {
   if (k === ' ') { e.preventDefault(); nextSong(); }
   else if (k === 'r') replay();
   else if (k === 'v') reveal();
+  else if (k === 's') stopSong();
   else if (k === 'f') fullScreen();
 });
 
@@ -320,7 +326,7 @@ function onState(e) {
     return;
   }
   if (e.data !== YT.PlayerState.ENDED || !clipStarted) return;
-  clipStarted = false; stopClip(); if (S.sfx) sfxScratch(); revealed = true; render();
+  clipStarted = false; stopClip(); revealed = true; render();
   if (S.auto && R.pos < R.order.length) setTimeout(() => { if (revealed) nextSong(); }, 5000);
 }
 
