@@ -93,4 +93,13 @@ const QUOTE_SETS = [{
 }];
 
 // Saved clip picks, keyed "movie|original quote": { v: video id, s: start sec, e: end sec, t: corrected text } or { none: 1 }.
-const CLIPS = {};
+const CLIPS = {
+  "National Lampoon's Christmas Vacation|Save the neck for me, Clark.": {"v": "quD0IMrW50E", "s": 10.5, "e": 15},
+  "National Lampoon's Christmas Vacation|It's the gift that keeps on giving the whole year.": {"v": "1K8-kNuDgoA", "s": 160, "e": 170},
+  "National Lampoon's Christmas Vacation|Little full, lotta sap.": {"v": "vJxJakcwBOM", "s": 18, "e": 29.5},
+  "National Lampoon's Christmas Vacation|Can I refill your eggnog for you? Get you something to eat? Drive you out to the middle of nowhere and leave you for dead?": {"v": "fKncYRJQRC8", "s": 124, "e": 129.5},
+  "Elf|You sit on a throne of lies!": {"v": "-8q1nouXvSY", "s": 36, "e": 38.5},
+  "Elf|Son of a nutcracker!": {"v": "D-r0q4ZDuXU", "s": 0, "e": 4},
+  "Elf|I just like smiling. Smiling's my favorite.": {"v": "K6xWZkYMQYw", "s": 15, "e": 24},
+  "Elf|Santa! Oh my God! Santa's coming! I know him!": {"v": "B3FSFXJmdp8", "s": 6, "e": 13}
+};
