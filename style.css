@@ -15,11 +15,12 @@ label { display: block; margin: 10px 0 4px; color: #c9c0e8; }
 .muted { color: #a89fc7; font-size: .9rem; }
 
 .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
-.sq { aspect-ratio: 1; background: #2b2540; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+.hd { text-align: center; font-weight: 800; color: #ffcf4a; font-size: 1.1rem; }
+.sq small { display: block; font-size: .72em; opacity: .75; margin-top: 3px; }
+.sq { aspect-ratio: 1 / .8; background: #2b2540; border-radius: 6px; display: flex; align-items: center; justify-content: center;
   text-align: center; padding: 3px; font-size: clamp(.6rem, 2.6vw, .95rem); line-height: 1.15; user-select: none;
   overflow: hidden; word-break: break-word; }
 .sq.on { background: #ff4fa3; }
-.sq.free { background: #ffcf4a; color: #12101c; font-weight: 700; }
 
 /* Host screen, sized for a TV */
 .code { font-size: 3rem; font-weight: 800; letter-spacing: .1em; color: #ffcf4a; }
@@ -47,14 +48,29 @@ label { display: block; margin: 10px 0 4px; color: #c9c0e8; }
 .big-bingo b { font-size: 6rem; }
 
 /* Printing */
+/* Round tabs on phones */
+.tabs { display: flex; gap: 6px; justify-content: center; margin: 8px 0; flex-wrap: wrap; }
+.tabs button { padding: 8px 12px; font-size: .9rem; }
+.rname { text-align: center; font-weight: 700; margin: 6px 0; }
+
+/* Printed sheet: rounds in a 2x2 layout */
+.sheet { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.sheet h3 { margin: 0 0 4px; text-align: center; font-size: 1rem; }
+.sheet .sq { aspect-ratio: auto; min-height: 88px; font-size: 10pt; }
+.sheethead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.namebox { border: 2px solid currentColor; padding: 6px 10px; min-width: 2.2in; }
+
 @media print {
+  @page { size: letter landscape; margin: .35in; }
+  .pcard { page-break-after: always; }
   body { background: #fff; color: #000; }
   .noprint { display: none !important; }
-  .pcard { break-inside: avoid; page-break-inside: avoid; margin-bottom: 24px; }
-  .pcard .sq { background: #fff; border: 1.5px solid #000; color: #000; font-size: 11pt; }
-  .pcard .sq.free { background: #ddd; }
+  .pcard { break-inside: avoid; page-break-inside: avoid; margin: 0; padding: 0; }
+  .pcard .sq { background: #fff; border: 1px solid #000; color: #000; font-size: 9pt; }
+  .hd { color: #000; }
 }
 .pcard h2 { margin: 0 0 6px; font-size: 1.1rem; display: flex; justify-content: space-between; }
 .pcard .grid { gap: 0; }
 .pcard .sq { border-radius: 0; }
 #checkOut .sq { font-size: .72rem; hyphens: auto; }
+.player .sq { aspect-ratio: auto; min-height: 84px; }

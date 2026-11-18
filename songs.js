@@ -1,8 +1,9 @@
 // Categories. Each song is [what shows on the card, extra info shown on reveal].
-// To add a category: copy a block, give it a new 2-letter id, and list at least 30 songs.
+// To add a category: copy a block, give it a new 1-letter id, and list at least 30 songs.
+// small: fixed small text on every square (e.g. 'TV Theme'). swap: show song big and artist small.
 window.CATEGORIES = [
   {
-    id: 'TV', name: 'TV Tunes', start: 0,
+    id: 'T', name: 'TV Tunes', start: 0, small: 'TV Theme',
     query: s => s[0] + ' TV theme song',
     songs: [
       ['Friends', 'The Rembrandts'], ['Cheers', 'Gary Portnoy'], ['Happy Days', 'Pratt & McClain'],
@@ -25,11 +26,14 @@ window.CATEGORIES = [
       ['Sanford and Son', 'Quincy Jones'], ['The Mary Tyler Moore Show', 'Sonny Curtis'],
       ["Mister Rogers' Neighborhood", ''], ['Twin Peaks', 'Angelo Badalamenti'], ['The Wonder Years', 'Joe Cocker'],
       ['Charles in Charge', ''], ["Diff'rent Strokes", ''], ['Saved by the Bell', ''], ['DuckTales', ''],
-      ['SpongeBob SquarePants', '']
+      ['SpongeBob SquarePants', ''],
+      ['Blossom', ''], ['Roseanne', ''], ['The Facts of Life', ''], ['ER', ''], ['Law & Order', ''],
+      ['Hill Street Blues', ''], ['Frasier', ''], ['Murder, She Wrote', ''], ['Barney & Friends', ''],
+      ['The West Wing', ''], ['Mork & Mindy', ''], ['The Nanny', ''], ['Dynasty', '']
     ]
   },
   {
-    id: 'NM', name: 'Name Game', start: 40,
+    id: 'N', name: 'Name Game', start: 40,
     query: s => s[0] + ' ' + s[1],
     songs: [
       ['Jolene', 'Dolly Parton'], ['Roxanne', 'The Police'], ['Layla', 'Derek and the Dominos'],
@@ -51,11 +55,15 @@ window.CATEGORIES = [
       ['Wake Up Little Susie', 'The Everly Brothers'], ['Hit the Road Jack', 'Ray Charles'],
       ['Ophelia', 'The Lumineers'], ['Carrie Anne', 'The Hollies'], ['Joanna', 'Kool & the Gang'],
       ["Annie's Song", 'John Denver'], ['Sweet Jane', 'The Velvet Underground'], ['Rosalita', 'Bruce Springsteen'],
-      ['Along Comes Mary', 'The Association']
+      ['Along Comes Mary', 'The Association'],
+      ['Sara Smile', 'Hall & Oates'], ['Long Tall Sally', 'Little Richard'], ['Willie and the Hand Jive', 'The Johnny Otis Show'],
+      ['Bernadette', 'Four Tops'], ['Lady Madonna', 'The Beatles'], ['Tom Sawyer', 'Rush'], ['My Sharona', 'The Knack'],
+      ['Donna', 'Ritchie Valens'], ['Sheila', 'Tommy Roe'], ['Big Bad John', 'Jimmy Dean'],
+      ["Mary Jane's Last Dance", 'Tom Petty and the Heartbreakers']
     ]
   },
   {
-    id: 'AR', name: 'Best-Selling Artists', start: 40, cardShows: 'artist',
+    id: 'A', name: 'Best-Selling Artists', start: 40, swap: true,
     query: s => s[1] + ' ' + s[0],
     songs: [
       ['The Beatles', 'Hey Jude'], ['Elvis Presley', 'Hound Dog'], ['Michael Jackson', 'Beat It'],
@@ -80,7 +88,7 @@ window.CATEGORIES = [
     ]
   },
   {
-    id: 'DR', name: 'Thinking & Drinking', start: 40,
+    id: 'D', name: 'Thinking & Drinking', start: 40,
     query: s => s[0] + ' ' + s[1],
     songs: [
       ['Margaritaville', 'Jimmy Buffett'], ['Red Red Wine', 'UB40'], ['Tubthumping', 'Chumbawamba'],
@@ -100,11 +108,15 @@ window.CATEGORIES = [
       ['Have a Drink on Me', 'AC/DC'], ['Copperhead Road', 'Steve Earle'], ['Drunken Sailor', 'The Irish Rovers'],
       ['Beer Barrel Polka', 'The Andrews Sisters'], ['In Heaven There Is No Beer', 'Frankie Yankovic'],
       ['Tequila Sunrise', 'Eagles'], ['Whiskey Rock-a-Roller', 'Lynyrd Skynyrd'], ['Hey Bartender', 'The Blues Brothers'],
-      ['Scenes from an Italian Restaurant', 'Billy Joel'], ['Six Pack Summer', 'Phil Vassar']
+      ['Scenes from an Italian Restaurant', 'Billy Joel'], ['Six Pack Summer', 'Phil Vassar'],
+      ['Closing Time', 'Semisonic'], ['I Like Beer', 'Tom T. Hall'], ['Rum', 'Brothers Osborne'],
+      ['Ten Rounds with Jose Cuervo', 'Tracy Byrd'], ["Pretty Good at Drinkin' Beer", 'Billy Currington'],
+      ['Sangria', 'Blake Shelton'], ["Don't Come Home A-Drinkin'", 'Loretta Lynn'],
+      ["Drunk (And I Don't Wanna Go Home)", 'Elle King & Miranda Lambert'], ['Champagne Jam', 'Atlanta Rhythm Section']
     ]
   },
   {
-    id: 'EH', name: '80s Hits', start: 40,
+    id: 'E', name: '80s Hits', start: 40,
     query: s => s[0] + ' ' + s[1],
     songs: [
       ["Don't Stop Believin'", 'Journey'], ['Take On Me', 'a-ha'], ["Sweet Child O' Mine", "Guns N' Roses"],
@@ -130,7 +142,7 @@ window.CATEGORIES = [
     ]
   },
   {
-    id: 'MV', name: 'Movie Songs', start: 30,
+    id: 'M', name: 'Movie Songs', start: 30, small: 'Movie',
     query: s => s[1],
     songs: [
       ['Titanic', 'My Heart Will Go On - Celine Dion'], ['Top Gun', 'Danger Zone - Kenny Loggins'],
@@ -165,7 +177,7 @@ window.CATEGORIES = [
     ]
   },
   {
-    id: 'XM', name: 'Christmas', start: 30,
+    id: 'X', name: 'Christmas', start: 30,
     query: s => s[0] + ' ' + s[1],
     songs: [
       ['All I Want for Christmas Is You', 'Mariah Carey'], ['Jingle Bell Rock', 'Bobby Helms'],

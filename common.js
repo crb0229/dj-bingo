@@ -1,4 +1,5 @@
 // Shared game logic. Cards are built from the game code + card number, so no server is needed.
+// A game is 1-4 rounds, one category per round. Each round's card is 3 rows x 5 columns (B-I-N-G-O), no free square.
 
 function seededRandom(seed) {
   let h = 1779033703 ^ seed.length;
@@ -25,47 +26,45 @@ function shuffle(arr, seed) {
   return a;
 }
 
-function newCode(cat) {
+// Code = one letter per round + dash + 3 random characters, e.g. "TNAD-K7Q".
+function newCode(cats) {
   const L = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
   let s = '';
   for (let i = 0; i < 3; i++) s += L[Math.floor(Math.random() * L.length)];
-  return cat.id + '-' + s;
+  return cats.map(c => c.id).join('') + '-' + s;
 }
 
-// Accepts "tv-k7q", "TVK7Q", etc. Returns {code, cat} or null.
+// Accepts "tnad-k7q", "TNADK7Q", etc. Returns {code, cats} or null.
 function parseCode(raw) {
   const c = (raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
-  const cat = CATEGORIES.find(k => c.startsWith(k.id));
-  if (!cat || c.length !== 5) return null;
-  return { code: cat.id + '-' + c.slice(2), cat };
+  if (c.length < 4 || c.length > 7) return null;
+  const ids = c.slice(0, -3), tail = c.slice(-3);
+  const cats = [...ids].map(id => CATEGORIES.find(k => k.id === id));
+  if (!cats.length || cats.some(x => !x)) return null;
+  return { code: ids + '-' + tail, cats };
 }
 
-// 25 song indexes; -1 is the FREE center square.
-function makeCard(code, cat, n) {
-  const idx = shuffle([...cat.songs.keys()], code + '#' + n).slice(0, 24);
-  idx.splice(12, 0, -1);
-  return idx;
+// 15 song indexes for one round of one card.
+function makeCard(code, cat, n, round) {
+  return shuffle([...cat.songs.keys()], code + '#' + n + '#' + round).slice(0, 15);
 }
 
-const LINES = (() => {
-  const L = [];
-  for (let r = 0; r < 5; r++) L.push([0, 1, 2, 3, 4].map(c => r * 5 + c));
-  for (let c = 0; c < 5; c++) L.push([0, 1, 2, 3, 4].map(r => r * 5 + c));
-  L.push([0, 6, 12, 18, 24], [4, 8, 12, 16, 20]);
-  return L;
-})();
-
-const PATTERNS = { line: 'One line', two: 'Two lines', full: 'Full card' };
+const ROWS = [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9], [10, 11, 12, 13, 14]];
+const PATTERNS = { line: 'One line across', two: 'Two lines across', full: 'Full card' };
 
 // marked(i) -> true if square i is covered
 function isWinner(marked, pattern) {
-  if (pattern === 'full') return [...Array(25).keys()].every(marked);
-  const n = LINES.filter(l => l.every(marked)).length;
+  if (pattern === 'full') return [...Array(15).keys()].every(marked);
+  const n = ROWS.filter(r => r.every(marked)).length;
   return pattern === 'two' ? n >= 2 : n >= 1;
 }
 
-function cardLabel(cat, i) {
-  return i === -1 ? 'FREE' : cat.songs[i][0];
+// What a square shows: big text and small text.
+function squareText(cat, i) {
+  const s = cat.songs[i];
+  if (cat.small) return [s[0], cat.small];
+  if (cat.swap) return [s[1], s[0]];
+  return [s[0], s[1]];
 }
 
 function esc(s) {
@@ -73,9 +72,11 @@ function esc(s) {
 }
 
 function cardHTML(cat, card, markedFn) {
-  return '<div class="grid">' + card.map((s, i) =>
-    `<div class="sq${s === -1 ? ' free' : ''}${markedFn && markedFn(i) ? ' on' : ''}" data-i="${i}"><span>${esc(cardLabel(cat, s))}</span></div>`
-  ).join('') + '</div>';
+  return '<div class="grid">' + [...'BINGO'].map(l => `<div class="hd">${l}</div>`).join('') +
+    card.map((s, i) => {
+      const [big, small] = squareText(cat, s);
+      return `<div class="sq${markedFn && markedFn(i) ? ' on' : ''}" data-i="${i}"><span>${esc(big)}<small>${esc(small)}</small></span></div>`;
+    }).join('') + '</div>';
 }
 
 function baseURL() {

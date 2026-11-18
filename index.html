@@ -6,7 +6,7 @@
 <h1>DJ Bingo</h1>
 <div class="panel">
   <label for="code">Game code (from the TV screen)</label>
-  <div class="row"><input id="code" placeholder="TV-K7Q" autocapitalize="characters" style="flex:1">
+  <div class="row"><input id="code" placeholder="TNAD-K7Q" autocapitalize="characters" style="flex:1">
   <button id="join">Join</button></div>
   <p id="err" class="muted"></p>
 </div>
@@ -19,7 +19,7 @@
 <script>
 const go = () => {
   const p = parseCode(document.getElementById('code').value);
-  if (!p) { document.getElementById('err').textContent = "That code doesn't look right. It's 2 letters, a dash, and 3 characters."; return; }
+  if (!p) { document.getElementById('err').textContent = "That code doesn't look right. Type it exactly as shown on the TV, like TNAD-K7Q."; return; }
   location.href = 'play.html?g=' + p.code;
 };
 document.getElementById('join').onclick = go;

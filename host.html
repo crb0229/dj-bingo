@@ -8,12 +8,10 @@
 <div id="setup" style="display:none">
   <h1>DJ Bingo <small>host</small></h1>
   <div class="panel">
-    <label>Category</label><select id="cat"></select>
+    <label>Rounds (one category each)</label>
+    <div class="row" id="rounds"></div>
     <label>To win</label><select id="pattern"></select>
-    <div class="row">
-      <label>Clip length (sec) <input id="clip" type="number" value="30" style="width:5em"></label>
-      <label>Start clip at (sec) <input id="start" type="number" style="width:5em"></label>
-    </div>
+    <label>Clip length (sec) <input id="clip" type="number" value="30" style="width:5em"></label>
     <p><button id="startGame">Start game</button></p>
   </div>
   <details class="panel">
@@ -42,6 +40,7 @@
           <button class="alt" id="replay">Replay</button>
           <button class="alt" id="reveal">Reveal</button>
           <button class="alt" id="wrong" title="Plays a different YouTube match">Wrong song</button>
+          <button id="nextRound">Start next round</button>
           <a class="btn alt" id="ytm" target="_blank" rel="noopener">Open in YouTube Music</a>
         </div>
       </div>
@@ -73,71 +72,78 @@
 const $ = id => document.getElementById(id);
 const S = JSON.parse(localStorage.getItem('djb_settings') || '{}');
 let G = JSON.parse(localStorage.getItem('djb_game') || 'null');
-let cat, revealed = false, altIdx = 0, player = null, playerReady = null;
+let cats, cat, R, revealed = false, altIdx = 0, player = null, playerReady = null;
 
 const saveG = () => localStorage.setItem('djb_game', JSON.stringify(G));
 const saveS = () => localStorage.setItem('djb_settings', JSON.stringify(S));
 
 // ---------- Setup ----------
-$('cat').innerHTML = CATEGORIES.map(c => `<option value="${c.id}">${esc(c.name)} (${c.songs.length} songs)</option>`).join('');
+const opts = CATEGORIES.map(c => `<option value="${c.id}">${esc(c.name)} (${c.songs.length})</option>`).join('');
+$('rounds').innerHTML = ['T', 'N', 'A', 'D'].map((d, i) =>
+  `<label>Round ${i + 1}<br><select data-d="${d}">${i ? '<option value="">(none)</option>' : ''}${opts}</select></label>`).join('');
+[...$('rounds').querySelectorAll('select')].forEach(x => x.value = x.dataset.d);
 $('pattern').innerHTML = Object.entries(PATTERNS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
 $('key').value = S.key || ''; $('auto').checked = !!S.auto; $('clip').value = S.clip || 30;
-const setStart = () => $('start').value = CATEGORIES.find(c => c.id === $('cat').value).start;
-$('cat').onchange = setStart; setStart();
 
 $('startGame').onclick = () => {
   Object.assign(S, { key: $('key').value.trim(), auto: $('auto').checked, clip: +$('clip').value || 30 }); saveS();
-  const c = CATEGORIES.find(c => c.id === $('cat').value);
-  G = { code: newCode(c), pattern: $('pattern').value, start: +$('start').value || 0,
-        order: shuffle([...c.songs.keys()]), pos: 0 };
+  const cats = [...$('rounds').querySelectorAll('select')].map(x => CATEGORIES.find(c => c.id === x.value)).filter(Boolean);
+  G = { code: newCode(cats), pattern: $('pattern').value, r: 0,
+        rounds: cats.map(c => ({ order: shuffle([...c.songs.keys()]), pos: 0 })) };
   saveG(); showGame();
 };
 
 // ---------- Game ----------
 function showGame() {
-  cat = parseCode(G.code).cat;
+  cats = parseCode(G.code).cats; cat = cats[G.r]; R = G.rounds[G.r];
   $('setup').style.display = 'none'; $('game').style.display = '';
   $('codeShow').textContent = G.code;
   $('url').textContent = baseURL().replace(/^https?:\/\//, '');
-  $('gameInfo').innerHTML = `${esc(cat.name)}<br>To win: ${PATTERNS[G.pattern]}`;
+  $('gameInfo').innerHTML = `<b style="font-size:1.4rem">Round ${G.r + 1} of ${cats.length}: ${esc(cat.name)}</b><br>To win: ${PATTERNS[G.pattern]}`;
   $('printLink').href = 'print.html?g=' + G.code;
   $('ytPanel').style.display = S.key ? '' : 'none';
   $('wrong').style.display = S.key ? '' : 'none';
   revealed = true; render();
 }
 
-function cur() { return G.pos ? cat.songs[G.order[G.pos - 1]] : null; }
+function cur() { return R.pos ? cat.songs[R.order[R.pos - 1]] : null; }
 
 function render() {
   const s = cur();
-  $('num').textContent = s ? `Song ${G.pos} of ${G.order.length}` : 'Ready';
+  $('num').textContent = s ? `Song ${R.pos} of ${R.order.length}` : 'Ready';
   $('title').textContent = s ? (revealed ? s[0] : '?') : '';
   $('sub').textContent = s && revealed ? s[1] : '';
-  $('next').textContent = G.pos ? 'Next song' : 'Play first song';
-  $('next').disabled = G.pos >= G.order.length;
+  $('next').textContent = R.pos ? 'Next song' : 'Play first song';
+  $('next').disabled = R.pos >= R.order.length;
+  $('nextRound').style.display = G.r < cats.length - 1 ? '' : 'none';
   $('replay').disabled = $('reveal').disabled = $('wrong').disabled = !s;
   $('ytm').style.display = s ? '' : 'none';
   if (s) $('ytm').href = 'https://music.youtube.com/search?q=' + encodeURIComponent(cat.query(s));
-  const shown = G.order.slice(0, G.pos - (revealed ? 0 : 1)).reverse();
+  const shown = R.order.slice(0, R.pos - (revealed ? 0 : 1)).reverse();
   $('called').innerHTML = shown.map(i => `<span>${esc(cat.songs[i][0])}</span>`).join('');
-  $('count').textContent = `(${G.pos})`;
+  $('count').textContent = `(${R.pos})`;
 }
 
-$('next').onclick = () => { G.pos++; saveG(); revealed = false; altIdx = 0; render(); play(); };
+$('next').onclick = () => { R.pos++; saveG(); revealed = false; altIdx = 0; render(); play(); };
+$('nextRound').onclick = () => {
+  if (!confirm(`Finish round ${G.r + 1} and start round ${G.r + 2}?`)) return;
+  if (player) player.stopVideo();
+  G.r++; saveG(); showGame();
+};
 $('replay').onclick = () => play();
 $('reveal').onclick = () => { revealed = true; render(); };
 $('wrong').onclick = () => { altIdx++; play(); };
-$('undo').onclick = () => { if (G.pos && confirm('Take back the last song?')) { G.pos--; saveG(); revealed = true; render(); if (player) player.stopVideo(); } };
+$('undo').onclick = () => { if (R.pos && confirm('Take back the last song?')) { R.pos--; saveG(); revealed = true; render(); if (player) player.stopVideo(); } };
 $('newGame').onclick = () => { if (confirm('End this game and start a new one?')) { if (player) player.stopVideo(); localStorage.removeItem('djb_game'); G = null; $('game').style.display = 'none'; $('setup').style.display = ''; } };
 $('showVid').onchange = e => $('cover').style.display = e.target.checked ? 'none' : '';
 
 $('check').onclick = () => {
   const n = parseInt($('checkNo').value); if (!n) return;
-  const card = makeCard(G.code, cat, n);
-  const called = new Set(G.order.slice(0, G.pos));
-  const marked = i => card[i] === -1 || called.has(card[i]);
+  const card = makeCard(G.code, cat, n, G.r);
+  const called = new Set(R.order.slice(0, R.pos));
+  const marked = i => called.has(card[i]);
   const ok = isWinner(marked, G.pattern);
-  $('checkOut').innerHTML = `<div class="win ${ok ? 'yes' : 'no'}">Card #${n}: ${ok ? 'BINGO!' : 'Not yet'}</div>` + cardHTML(cat, card, marked);
+  $('checkOut').innerHTML = `<div class="win ${ok ? 'yes' : 'no'}">Card #${n}, round ${G.r + 1}: ${ok ? 'BINGO!' : 'Not yet'}</div>` + cardHTML(cat, card, marked);
 };
 $('checkNo').onkeydown = e => { if (e.key === 'Enter') $('check').click(); };
 
@@ -173,7 +179,7 @@ async function play() {
     await loadYT();
     const ids = await lookup(cat.query(s));
     if (altIdx >= ids.length) { $('ytMsg').textContent = 'No playable match found. Use "Open in YouTube Music".'; return; }
-    player.loadVideoById({ videoId: ids[altIdx], startSeconds: G.start, endSeconds: G.start + S.clip });
+    player.loadVideoById({ videoId: ids[altIdx], startSeconds: cat.start, endSeconds: cat.start + S.clip });
   } catch (e) {
     $('ytMsg').textContent = 'YouTube lookup failed: ' + e.message;
   }
@@ -182,10 +188,10 @@ async function play() {
 function onState(e) {
   if (e.data !== YT.PlayerState.ENDED) return;
   revealed = true; render();
-  if (S.auto && G.pos < G.order.length) setTimeout(() => { if (revealed) $('next').click(); }, 5000);
+  if (S.auto && R.pos < R.order.length) setTimeout(() => { if (revealed) $('next').click(); }, 5000);
 }
 
 // ---------- Start ----------
-if (G && parseCode(G.code)) showGame(); else $('setup').style.display = '';
+if (G && G.rounds && parseCode(G.code)) showGame(); else $('setup').style.display = '';
 </script>
 </body></html>
