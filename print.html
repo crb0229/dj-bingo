@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DJ Bingo printable cards</title><link rel="stylesheet" href="style.css">
+<style>@media print { .pcard { width: 6.5in; margin: 0 auto 0.4in; } }</style>
+</head><body><div class="wrap" style="max-width:720px">
+<div class="panel noprint">
+  <h1>Printable cards</h1>
+  <div class="row">
+    <label>Game code <input id="code" size="8"></label>
+    <label>First card # <input id="from" type="number" value="1001" style="width:7em"></label>
+    <label>How many <input id="count" type="number" value="6" style="width:5em"></label>
+  </div>
+  <p class="row"><button id="make">Show cards</button><button class="alt" onclick="print()">Print</button></p>
+  <p class="muted">Printed cards start at #1001 so they never match a phone card. Two cards fit on each page.</p>
+</div>
+<div id="out"></div>
+</div>
+<script src="songs.js"></script><script src="common.js"></script>
+<script>
+const q = new URLSearchParams(location.search);
+document.getElementById('code').value = q.get('g') || '';
+function make() {
+  const p = parseCode(document.getElementById('code').value);
+  if (!p) { alert('Enter the game code from the host screen.'); return; }
+  const from = +document.getElementById('from').value, count = Math.min(+document.getElementById('count').value, 100);
+  let h = '';
+  for (let n = from; n < from + count; n++)
+    h += `<div class="pcard panel"><h2><span>DJ Bingo &middot; ${esc(p.cat.name)}</span><span>${p.code} &middot; #${n}</span></h2>${cardHTML(p.cat, makeCard(p.code, p.cat, n))}</div>`;
+  document.getElementById('out').innerHTML = h;
+}
+document.getElementById('make').onclick = make;
+if (q.get('g')) make();
+</script>
+</body></html>

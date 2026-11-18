@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DJ Bingo</title><link rel="stylesheet" href="style.css">
+</head><body><div class="wrap" style="max-width:520px">
+<h1>DJ Bingo</h1>
+<div class="panel">
+  <label for="code">Game code (from the TV screen)</label>
+  <div class="row"><input id="code" placeholder="TV-K7Q" autocapitalize="characters" style="flex:1">
+  <button id="join">Join</button></div>
+  <p id="err" class="muted"></p>
+</div>
+<div class="panel">
+  <a class="btn alt" href="host.html">Host a game</a>
+  <p class="muted">Run the host screen on a laptop or cast the Chrome tab to the TV.</p>
+</div>
+</div>
+<script src="songs.js"></script><script src="common.js"></script>
+<script>
+const go = () => {
+  const p = parseCode(document.getElementById('code').value);
+  if (!p) { document.getElementById('err').textContent = "That code doesn't look right. It's 2 letters, a dash, and 3 characters."; return; }
+  location.href = 'play.html?g=' + p.code;
+};
+document.getElementById('join').onclick = go;
+document.getElementById('code').onkeydown = e => { if (e.key === 'Enter') go(); };
+</script>
+</body></html>

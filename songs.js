@@ -1,0 +1,132 @@
+// Categories. Each song is [what shows on the card, extra info shown on reveal].
+// To add a category: copy a block, give it a new 2-letter id, and list at least 30 songs.
+window.CATEGORIES = [
+  {
+    id: 'TV', name: 'TV Tunes', start: 0,
+    query: s => s[0] + ' TV theme song',
+    songs: [
+      ['Friends', 'The Rembrandts'], ['Cheers', 'Gary Portnoy'], ['Happy Days', 'Pratt & McClain'],
+      ['The Brady Bunch', ''], ["Gilligan's Island", ''], ['The Fresh Prince of Bel-Air', 'DJ Jazzy Jeff & The Fresh Prince'],
+      ['The Golden Girls', 'Thank You for Being a Friend'], ['The Jeffersons', "Movin' On Up"],
+      ['Laverne & Shirley', 'Making Our Dreams Come True'], ['Welcome Back, Kotter', 'John Sebastian'],
+      ['The Love Boat', 'Jack Jones'], ['Full House', 'Everywhere You Look'],
+      ['Growing Pains', 'As Long as We Got Each Other'], ['Family Matters', 'As Days Go By'],
+      ['Night Court', ''], ['Seinfeld', ''], ['The Simpsons', 'Danny Elfman'], ['The Addams Family', 'Vic Mizzy'],
+      ['The Munsters', ''], ['Mission: Impossible', 'Lalo Schifrin'], ['Hawaii Five-O', 'The Ventures'],
+      ['Batman (1966)', 'Neal Hefti'], ['The Andy Griffith Show', "The Fishin' Hole"],
+      ['The Beverly Hillbillies', 'Flatt & Scruggs'], ['Green Acres', ''], ['The Flintstones', ''],
+      ['Scooby-Doo, Where Are You!', ''], ['The Jetsons', ''], ['Sesame Street', ''], ['The Office', ''],
+      ['Parks and Recreation', ''], ['Gilmore Girls', 'Where You Lead'], ['The Big Bang Theory', 'Barenaked Ladies'],
+      ['Malcolm in the Middle', 'They Might Be Giants'], ['Scrubs', 'Lazlo Bane'], ["That '70s Show", 'Cheap Trick'],
+      ["Dawson's Creek", 'Paula Cole'], ['Miami Vice', 'Jan Hammer'], ['Magnum, P.I.', ''], ['The A-Team', ''],
+      ['Knight Rider', ''], ['The Dukes of Hazzard', 'Waylon Jennings'], ['Baywatch', ''], ['The X-Files', 'Mark Snow'],
+      ['Game of Thrones', 'Ramin Djawadi'], ['Stranger Things', ''], ['The Sopranos', 'Alabama 3'], ['Doctor Who', ''],
+      ['Star Trek', ''], ['Married... with Children', 'Frank Sinatra'], ['The Monkees', ''],
+      ['Sanford and Son', 'Quincy Jones'], ['The Mary Tyler Moore Show', 'Sonny Curtis'],
+      ["Mister Rogers' Neighborhood", ''], ['Twin Peaks', 'Angelo Badalamenti'], ['The Wonder Years', 'Joe Cocker'],
+      ['Charles in Charge', ''], ["Diff'rent Strokes", ''], ['Saved by the Bell', ''], ['DuckTales', ''],
+      ['SpongeBob SquarePants', '']
+    ]
+  },
+  {
+    id: 'NM', name: 'Name Game', start: 40,
+    query: s => s[0] + ' ' + s[1],
+    songs: [
+      ['Jolene', 'Dolly Parton'], ['Roxanne', 'The Police'], ['Layla', 'Derek and the Dominos'],
+      ['Billie Jean', 'Michael Jackson'], ['Sweet Caroline', 'Neil Diamond'], ['Hey Jude', 'The Beatles'],
+      ['Mrs. Robinson', 'Simon & Garfunkel'], ['Rosanna', 'Toto'], ['Gloria', 'Laura Branigan'],
+      ['Mandy', 'Barry Manilow'], ['Peggy Sue', 'Buddy Holly'], ['Johnny B. Goode', 'Chuck Berry'],
+      ['Proud Mary', 'Creedence Clearwater Revival'], ['Help Me, Rhonda', 'The Beach Boys'],
+      ['Barbara Ann', 'The Beach Boys'], ['Bennie and the Jets', 'Elton John'], ['Daniel', 'Elton John'],
+      ["Jessie's Girl", 'Rick Springfield'], ['Come On Eileen', "Dexys Midnight Runners"], ['Angie', 'The Rolling Stones'],
+      ['Beth', 'KISS'], ['Lola', 'The Kinks'], ['Michelle', 'The Beatles'], ['Eleanor Rigby', 'The Beatles'],
+      ['Valerie', 'Mark Ronson ft. Amy Winehouse'], ['Mr. Jones', 'Counting Crows'], ['Delilah', 'Tom Jones'],
+      ['Alison', 'Elvis Costello'], ['Rhiannon', 'Fleetwood Mac'], ['Sara', 'Fleetwood Mac'],
+      ['Ruby Tuesday', 'The Rolling Stones'], ["Brandy (You're a Fine Girl)", 'Looking Glass'],
+      ['Hey There Delilah', "Plain White T's"], ['Jack & Diane', 'John Mellencamp'], ['Diana', 'Paul Anka'],
+      ['Maggie May', 'Rod Stewart'], ['Cecilia', 'Simon & Garfunkel'], ['867-5309/Jenny', 'Tommy Tutone'],
+      ['Mickey', 'Toni Basil'], ['Me and Bobby McGee', 'Janis Joplin'], ['Lucy in the Sky with Diamonds', 'The Beatles'],
+      ['Bad, Bad Leroy Brown', 'Jim Croce'], ['Ben', 'Michael Jackson'], ['Dirty Diana', 'Michael Jackson'],
+      ['Mambo No. 5', 'Lou Bega'], ['Peg', 'Steely Dan'], ['Hello Mary Lou', 'Ricky Nelson'], ['Runaround Sue', 'Dion'],
+      ['Wake Up Little Susie', 'The Everly Brothers'], ['Hit the Road Jack', 'Ray Charles'],
+      ['Ophelia', 'The Lumineers'], ['Carrie Anne', 'The Hollies'], ['Joanna', 'Kool & the Gang'],
+      ["Annie's Song", 'John Denver'], ['Sweet Jane', 'The Velvet Underground'], ['Rosalita', 'Bruce Springsteen'],
+      ['Along Comes Mary', 'The Association']
+    ]
+  },
+  {
+    id: 'AR', name: 'Best-Selling Artists', start: 40, cardShows: 'artist',
+    query: s => s[1] + ' ' + s[0],
+    songs: [
+      ['The Beatles', 'Hey Jude'], ['Elvis Presley', 'Hound Dog'], ['Michael Jackson', 'Beat It'],
+      ['Elton John', 'Rocket Man'], ['Madonna', 'Like a Prayer'], ['Led Zeppelin', 'Whole Lotta Love'],
+      ['Rihanna', 'Umbrella'], ['Pink Floyd', 'Another Brick in the Wall'], ['Mariah Carey', 'Fantasy'],
+      ['Taylor Swift', 'Shake It Off'], ['Queen', 'Bohemian Rhapsody'], ['Whitney Houston', 'I Wanna Dance with Somebody'],
+      ['Celine Dion', 'My Heart Will Go On'], ['Garth Brooks', 'Friends in Low Places'], ['Billy Joel', 'Piano Man'],
+      ['AC/DC', 'Back in Black'], ['ABBA', 'Dancing Queen'], ['The Rolling Stones', 'Paint It Black'],
+      ['Eagles', 'Hotel California'], ['Bruce Springsteen', 'Born to Run'], ['Phil Collins', 'In the Air Tonight'],
+      ['Bon Jovi', "Livin' on a Prayer"], ['Fleetwood Mac', 'Go Your Own Way'], ['U2', 'With or Without You'],
+      ['Aerosmith', 'Dream On'], ['Prince', 'Purple Rain'], ['Frank Sinatra', 'Fly Me to the Moon'],
+      ['Stevie Wonder', 'Superstition'], ['Beyoncé', 'Crazy in Love'], ['Bruno Mars', 'Uptown Funk'],
+      ['Adele', 'Rolling in the Deep'], ['Ed Sheeran', 'Shape of You'], ['Kenny Rogers', 'The Gambler'],
+      ['Barbra Streisand', 'The Way We Were'], ['Neil Diamond', 'Cracklin\' Rosie'], ['Bee Gees', "Stayin' Alive"],
+      ['Metallica', 'Enter Sandman'], ["Guns N' Roses", "Sweet Child O' Mine"], ['Journey', "Don't Stop Believin'"],
+      ['Lady Gaga', 'Bad Romance'], ['Katy Perry', 'Roar'], ['Shania Twain', "Man! I Feel Like a Woman!"],
+      ['Coldplay', 'Viva la Vida'], ['Lionel Richie', 'All Night Long'], ['Tina Turner', "What's Love Got to Do with It"],
+      ['Rod Stewart', "Da Ya Think I'm Sexy?"], ['Bob Marley', 'Three Little Birds'], ['Def Leppard', 'Pour Some Sugar on Me'],
+      ['Van Halen', 'Jump'], ['Chicago', "Saturday in the Park"], ['The Beach Boys', 'Good Vibrations'],
+      ['George Strait', 'Amarillo by Morning'], ['Justin Bieber', 'Sorry'], ['Drake', "Hotline Bling"],
+      ['Eminem', 'Lose Yourself']
+    ]
+  },
+  {
+    id: 'DR', name: 'Thinking & Drinking', start: 40,
+    query: s => s[0] + ' ' + s[1],
+    songs: [
+      ['Margaritaville', 'Jimmy Buffett'], ['Red Red Wine', 'UB40'], ['Tubthumping', 'Chumbawamba'],
+      ['Escape (The Piña Colada Song)', 'Rupert Holmes'], ['Tequila', 'The Champs'],
+      ['One Bourbon, One Scotch, One Beer', 'George Thorogood'], ['Friends in Low Places', 'Garth Brooks'],
+      ['Two Piña Coladas', 'Garth Brooks'], ['Alcohol', 'Brad Paisley'], ['Drunk on a Plane', 'Dierks Bentley'],
+      ['Beer Never Broke My Heart', 'Luke Combs'], ['Champagne Supernova', 'Oasis'], ['Cheers (Drink to That)', 'Rihanna'],
+      ['Rehab', 'Amy Winehouse'], ['Whiskey in the Jar', 'Thin Lizzy'], ['Red Solo Cup', 'Toby Keith'],
+      ["It's Five O'Clock Somewhere", 'Alan Jackson & Jimmy Buffett'], ['Tennessee Whiskey', 'Chris Stapleton'],
+      ['Whiskey River', 'Willie Nelson'], ['Beer for My Horses', 'Toby Keith & Willie Nelson'],
+      ['Drinkin\' Problem', 'Midland'], ['Scotch and Soda', 'The Kingston Trio'], ['Cigarettes & Alcohol', 'Oasis'],
+      ['Spill the Wine', 'Eric Burdon & War'], ['Piano Man', 'Billy Joel'], ['Bartender', 'Lady A'],
+      ['Drink in My Hand', 'Eric Church'], ['Whiskey Glasses', 'Morgan Wallen'], ['Rum and Coca-Cola', 'The Andrews Sisters'],
+      ['Strawberry Wine', 'Deana Carter'], ['Cherry Wine', 'Hozier'], ['Whiskey Lullaby', 'Brad Paisley & Alison Krauss'],
+      ["There's a Tear in My Beer", 'Hank Williams Jr.'], ['Pop a Top', 'Alan Jackson'], ['I Love This Bar', 'Toby Keith'],
+      ['Day Drinking', 'Little Big Town'], ['Sunday Mornin\' Comin\' Down', 'Johnny Cash'], ['Beer Run', 'Garth Brooks & George Jones'],
+      ['Have a Drink on Me', 'AC/DC'], ['Copperhead Road', 'Steve Earle'], ['Drunken Sailor', 'The Irish Rovers'],
+      ['Beer Barrel Polka', 'The Andrews Sisters'], ['In Heaven There Is No Beer', 'Frankie Yankovic'],
+      ['Tequila Sunrise', 'Eagles'], ['Whiskey Rock-a-Roller', 'Lynyrd Skynyrd'], ['Hey Bartender', 'The Blues Brothers'],
+      ['Scenes from an Italian Restaurant', 'Billy Joel'], ['Six Pack Summer', 'Phil Vassar']
+    ]
+  },
+  {
+    id: 'EH', name: '80s Hits', start: 40,
+    query: s => s[0] + ' ' + s[1],
+    songs: [
+      ["Don't Stop Believin'", 'Journey'], ['Take On Me', 'a-ha'], ["Sweet Child O' Mine", "Guns N' Roses"],
+      ["Livin' on a Prayer", 'Bon Jovi'], ['Girls Just Want to Have Fun', 'Cyndi Lauper'], ['Footloose', 'Kenny Loggins'],
+      ['Eye of the Tiger', 'Survivor'], ['Africa', 'Toto'], ['Every Breath You Take', 'The Police'],
+      ['Like a Prayer', 'Madonna'], ['Thriller', 'Michael Jackson'], ['Beat It', 'Michael Jackson'],
+      ['Wake Me Up Before You Go-Go', 'Wham!'], ["Don't You (Forget About Me)", 'Simple Minds'],
+      ['Never Gonna Give You Up', 'Rick Astley'], ['I Wanna Dance with Somebody', 'Whitney Houston'],
+      ['Total Eclipse of the Heart', 'Bonnie Tyler'], ['Here I Go Again', 'Whitesnake'], ['Jump', 'Van Halen'],
+      ['Pour Some Sugar on Me', 'Def Leppard'], ['Walk Like an Egyptian', 'The Bangles'], ['Karma Chameleon', 'Culture Club'],
+      ['Tainted Love', 'Soft Cell'], ['Come On Eileen', "Dexys Midnight Runners"], ['Hungry Like the Wolf', 'Duran Duran'],
+      ['Material Girl', 'Madonna'], ['Purple Rain', 'Prince'], ['When Doves Cry', 'Prince'],
+      ['Bette Davis Eyes', 'Kim Carnes'], ['Celebration', 'Kool & the Gang'], ['Ghostbusters', 'Ray Parker Jr.'],
+      ['Faith', 'George Michael'], ['Careless Whisper', 'George Michael'], ['With or Without You', 'U2'],
+      ['Separate Ways', 'Journey'], ["I Love Rock 'n' Roll", 'Joan Jett & the Blackhearts'],
+      ['Should I Stay or Should I Go', 'The Clash'], ['Down Under', 'Men at Work'], ['The Safety Dance', 'Men Without Hats'],
+      ['99 Luftballons', 'Nena'], ['Love Shack', "The B-52's"], ['Walking on Sunshine', 'Katrina and the Waves'],
+      ['The Final Countdown', 'Europe'], ['Danger Zone', 'Kenny Loggins'], ['Flashdance... What a Feeling', 'Irene Cara'],
+      ['Kids in America', 'Kim Wilde'], ['You Spin Me Round', 'Dead or Alive'], ['Shout', 'Tears for Fears'],
+      ['Everybody Wants to Rule the World', 'Tears for Fears'], ['Jessie\'s Girl', 'Rick Springfield'],
+      ['Billie Jean', 'Michael Jackson'], ['Here Comes the Rain Again', 'Eurythmics'], ['Sweet Dreams (Are Made of This)', 'Eurythmics'],
+      ['Back in Black', 'AC/DC']
+    ]
+  }
+];

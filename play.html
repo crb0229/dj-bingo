@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DJ Bingo card</title><link rel="stylesheet" href="style.css">
+</head><body class="player"><div class="wrap">
+<div id="head"></div>
+<div id="card"></div>
+<div class="row" style="justify-content:center;margin-top:14px">
+  <button id="bingo">BINGO!</button>
+  <button class="alt" id="clear">Clear marks</button>
+  <a class="btn alt" href="index.html">Leave</a>
+</div>
+<p class="muted" style="text-align:center">Tap a square when you hear that song. Tap again to unmark.</p>
+</div>
+<div class="big-bingo" id="big">BINGO!<br>Card #<b id="bigno"></b><span style="font-size:1rem;font-weight:normal">Show this to the host. Tap to close.</span></div>
+<script src="songs.js"></script><script src="common.js"></script>
+<script>
+const q = new URLSearchParams(location.search);
+const p = parseCode(q.get('g'));
+if (!p) location.href = 'index.html';
+const { code, cat } = p;
+
+// Card number: from the link, or picked at random once per game and remembered on this phone.
+const numKey = 'djb_num_' + code;
+let n = parseInt(q.get('n')) || parseInt(localStorage.getItem(numKey)) || (1 + Math.floor(Math.random() * 999));
+localStorage.setItem(numKey, n);
+
+const card = makeCard(code, cat, n);
+const markKey = 'djb_marks_' + code + '_' + n;
+let marks = new Set(JSON.parse(localStorage.getItem(markKey) || '[12]'));
+
+document.getElementById('head').innerHTML =
+  `<div class="cardno">${esc(cat.name)} &middot; game ${code} &middot; card #<b>${n}</b></div>`;
+
+function draw() {
+  document.getElementById('card').innerHTML = cardHTML(cat, card, i => marks.has(i));
+  localStorage.setItem(markKey, JSON.stringify([...marks]));
+}
+document.getElementById('card').onclick = e => {
+  const sq = e.target.closest('.sq'); if (!sq) return;
+  const i = +sq.dataset.i; if (i === 12) return;
+  marks.has(i) ? marks.delete(i) : marks.add(i); draw();
+};
+document.getElementById('clear').onclick = () => { if (confirm('Clear all marks?')) { marks = new Set([12]); draw(); } };
+document.getElementById('bingo').onclick = () => { document.getElementById('bigno').textContent = n; document.getElementById('big').style.display = 'flex'; };
+document.getElementById('big').onclick = e => e.currentTarget.style.display = 'none';
+draw();
+</script>
+</body></html>
