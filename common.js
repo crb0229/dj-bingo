@@ -50,13 +50,28 @@ function makeCard(code, cat, n, round) {
 }
 
 const ROWS = [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9], [10, 11, 12, 13, 14]];
-const PATTERNS = { line: 'One line across', two: 'Two lines across', full: 'Full card' };
+// Win patterns. "rows" patterns need that many full rows across; the rest need specific squares.
+// Squares are numbered 0-4 (top row), 5-9 (middle), 10-14 (bottom).
+const PATTERNS = {
+  line: { name: 'One line across', rows: 1, show: [5, 6, 7, 8, 9] },
+  two: { name: 'Two lines across', rows: 2, show: [0, 1, 2, 3, 4, 10, 11, 12, 13, 14] },
+  v: { name: 'V shape', cells: [0, 4, 6, 8, 12] },
+  h: { name: 'H shape', cells: [0, 5, 10, 4, 9, 14, 6, 7, 8] },
+  corners: { name: 'Four corners', cells: [0, 4, 10, 14] },
+  full: { name: 'Full card', cells: [...Array(15).keys()] }
+};
 
 // marked(i) -> true if square i is covered
 function isWinner(marked, pattern) {
-  if (pattern === 'full') return [...Array(15).keys()].every(marked);
-  const n = ROWS.filter(r => r.every(marked)).length;
-  return pattern === 'two' ? n >= 2 : n >= 1;
+  const p = PATTERNS[pattern];
+  if (p.rows) return ROWS.filter(r => r.every(marked)).length >= p.rows;
+  return p.cells.every(marked);
+}
+
+// Small picture of a pattern for the host screen.
+function patternHTML(pattern) {
+  const p = PATTERNS[pattern], on = new Set(p.cells || p.show);
+  return '<div class="pat">' + [...Array(15).keys()].map(i => `<i class="${on.has(i) ? 'on' : ''}"></i>`).join('') + '</div>';
 }
 
 // What a square shows: big text and small text.

@@ -74,3 +74,6 @@ label { display: block; margin: 10px 0 4px; color: #c9c0e8; }
 .pcard .sq { border-radius: 0; }
 #checkOut .sq { font-size: .72rem; hyphens: auto; }
 .player .sq { aspect-ratio: auto; min-height: 84px; }
+.pat { display: grid; grid-template-columns: repeat(5, 24px); gap: 3px; margin: 6px 0 0 auto; width: max-content; }
+.pat i { width: 24px; height: 20px; background: #3a3352; border-radius: 2px; }
+.pat i.on { background: #ffcf4a; }

@@ -10,7 +10,6 @@
   <div class="panel">
     <label>Rounds (one category each)</label>
     <div class="row" id="rounds"></div>
-    <label>To win</label><select id="pattern"></select>
     <label>Clip length (sec) <input id="clip" type="number" value="30" style="width:5em"></label>
     <p><button id="startGame">Start game</button></p>
   </div>
@@ -79,17 +78,20 @@ const saveS = () => localStorage.setItem('djb_settings', JSON.stringify(S));
 
 // ---------- Setup ----------
 const opts = CATEGORIES.map(c => `<option value="${c.id}">${esc(c.name)} (${c.songs.length})</option>`).join('');
-$('rounds').innerHTML = ['T', 'N', 'A', 'D'].map((d, i) =>
-  `<label>Round ${i + 1}<br><select data-d="${d}">${i ? '<option value="">(none)</option>' : ''}${opts}</select></label>`).join('');
+const pats = Object.entries(PATTERNS).map(([k, v]) => `<option value="${k}">${v.name}</option>`).join('');
+$('rounds').innerHTML = [['T', 'line'], ['N', 'v'], ['A', 'h'], ['D', 'full']].map(([d, w], i) =>
+  `<label>Round ${i + 1}<br><select class="rc" data-d="${d}">${i ? '<option value="">(none)</option>' : ''}${opts}</select>
+   <br><select class="rp" data-d="${w}">${pats}</select></label>`).join('');
 [...$('rounds').querySelectorAll('select')].forEach(x => x.value = x.dataset.d);
-$('pattern').innerHTML = Object.entries(PATTERNS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
 $('key').value = S.key || ''; $('auto').checked = !!S.auto; $('clip').value = S.clip || 30;
 
 $('startGame').onclick = () => {
   Object.assign(S, { key: $('key').value.trim(), auto: $('auto').checked, clip: +$('clip').value || 30 }); saveS();
-  const cats = [...$('rounds').querySelectorAll('select')].map(x => CATEGORIES.find(c => c.id === x.value)).filter(Boolean);
-  G = { code: newCode(cats), pattern: $('pattern').value, r: 0,
-        rounds: cats.map(c => ({ order: shuffle([...c.songs.keys()]), pos: 0 })) };
+  const pk = [...$('rounds').querySelectorAll('.rp')].map(x => x.value);
+  const picks = [...$('rounds').querySelectorAll('.rc')].map((x, i) => ({ c: CATEGORIES.find(c => c.id === x.value), p: pk[i] })).filter(x => x.c);
+  const cats = picks.map(x => x.c);
+  G = { code: newCode(cats), r: 0,
+        rounds: picks.map(x => ({ order: shuffle([...x.c.songs.keys()]), pos: 0, pattern: x.p })) };
   saveG(); showGame();
 };
 
@@ -99,7 +101,7 @@ function showGame() {
   $('setup').style.display = 'none'; $('game').style.display = '';
   $('codeShow').textContent = G.code;
   $('url').textContent = baseURL().replace(/^https?:\/\//, '');
-  $('gameInfo').innerHTML = `<b style="font-size:1.4rem">Round ${G.r + 1} of ${cats.length}: ${esc(cat.name)}</b><br>To win: ${PATTERNS[G.pattern]}`;
+  $('gameInfo').innerHTML = `<b style="font-size:1.4rem">Round ${G.r + 1} of ${cats.length}: ${esc(cat.name)}</b><br>To win: ${PATTERNS[R.pattern].name}${patternHTML(R.pattern)}`;
   $('printLink').href = 'print.html?g=' + G.code;
   $('ytPanel').style.display = S.key ? '' : 'none';
   $('wrong').style.display = S.key ? '' : 'none';
@@ -142,7 +144,7 @@ $('check').onclick = () => {
   const card = makeCard(G.code, cat, n, G.r);
   const called = new Set(R.order.slice(0, R.pos));
   const marked = i => called.has(card[i]);
-  const ok = isWinner(marked, G.pattern);
+  const ok = isWinner(marked, R.pattern);
   $('checkOut').innerHTML = `<div class="win ${ok ? 'yes' : 'no'}">Card #${n}, round ${G.r + 1}: ${ok ? 'BINGO!' : 'Not yet'}</div>` + cardHTML(cat, card, marked);
 };
 $('checkNo').onkeydown = e => { if (e.key === 'Enter') $('check').click(); };
@@ -192,6 +194,6 @@ function onState(e) {
 }
 
 // ---------- Start ----------
-if (G && G.rounds && parseCode(G.code)) showGame(); else $('setup').style.display = '';
+if (G && G.rounds && G.rounds[0].pattern && parseCode(G.code)) showGame(); else $('setup').style.display = '';
 </script>
 </body></html>
