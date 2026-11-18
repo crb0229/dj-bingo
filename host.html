@@ -143,6 +143,7 @@ function showGame() {
   $('checkOut').innerHTML = '';
   revealed = true; stopClip(); render();
   keepAwake();
+  if (S.key) { loadYT().then(() => { $('ytMsg').textContent = ''; }); prefetchNext(); }
 }
 
 function cur() { return R.pos ? cat.songs[R.order[R.pos - 1]] : null; }
@@ -192,11 +193,17 @@ function stopClip() {
 
 function nextSong() {
   if ($('next').disabled) return;
-  if (S.sfx) sfxScratch();
   R.pos++; saveG(); revealed = false; altIdx = 0; $('ytMsg').textContent = ''; render();
-  setTimeout(() => { play(); startClip(); }, S.sfx ? 450 : 0);
+  if (S.key) play(); else { if (S.sfx) sfxScratch(); startClip(); }
 }
-function replay() { if (!cur()) return; $('ytMsg').textContent = ''; play(); startClip(); }
+function replay() {
+  if (!cur()) return; $('ytMsg').textContent = '';
+  if (!S.key) { startClip(); return; }
+  // Same song already loaded: restart it right inside the tap, which phones allow.
+  if (player && loadedId && player.getVideoData && player.getVideoData().video_id === loadedId) {
+    stopClip(); clipStarted = false; player.unMute(); player.seekTo(cat.start, true); player.playVideo(); watchStart();
+  } else play();
+}
 function reveal() { if (!cur()) return; revealed = true; render(); }
 function fullScreen() { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); }
 
@@ -209,7 +216,7 @@ $('nextRound').onclick = () => {
   if (player) player.stopVideo();
   G.r++; saveG(); showGame();
 };
-$('wrong').onclick = () => { altIdx++; play(); startClip(); };
+$('wrong').onclick = () => { altIdx++; play(); };
 $('undo').onclick = () => { if (R.pos && confirm('Take back the last song?')) { R.pos--; saveG(); revealed = true; stopClip(); render(); if (player) player.stopVideo(); } };
 $('newGame').onclick = () => { if (confirm('End this game and start a new one?')) { if (player) player.stopVideo(); stopClip(); localStorage.removeItem('djb_game'); G = null; document.body.style.removeProperty('--accent'); $('game').style.display = 'none'; $('setup').style.display = ''; } };
 $('showVid').onchange = e => $('cover').style.display = e.target.checked ? 'none' : '';
@@ -245,9 +252,12 @@ function loadYT() {
   playerReady = new Promise(res => {
     window.onYouTubeIframeAPIReady = () => {
       player = new YT.Player('yt', { width: 200, height: 200, playerVars: { controls: 0, disablekb: 1, rel: 0, playsinline: 1 },
-        events: { onReady: res, onStateChange: onState, onError: () => { altIdx++; play(); } } });
+        events: { onReady: res, onStateChange: onState,
+          onError: e => { $('ytMsg').textContent = 'That video would not play (YouTube error ' + e.data + '). Trying the next match...'; altIdx++; play(); } } });
     };
-    const t = document.createElement('script'); t.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(t);
+    const t = document.createElement('script'); t.src = 'https://www.youtube.com/iframe_api';
+    t.onerror = () => { $('ytMsg').textContent = 'Could not load the YouTube player. If you use Brave, turn Shields off for this site.'; };
+    document.head.appendChild(t);
   });
   return playerReady;
 }
@@ -264,21 +274,53 @@ async function lookup(q) {
   return ids;
 }
 
+let loadedId = null, clipStarted = false, startWatch = null;
+const cachedIds = s => JSON.parse(localStorage.getItem('djb_yt_' + cat.query(s)) || 'null');
+
+// Look up the next song ahead of time so the tap can start it with no waiting.
+function prefetchNext() {
+  if (!S.key || R.pos >= R.order.length) return;
+  lookup(cat.query(cat.songs[R.order[R.pos]])).catch(e => { $('ytMsg').textContent = 'YouTube lookup failed: ' + e.message; });
+}
+
+function loadClip(id) {
+  loadedId = id; clipStarted = false; stopClip();
+  player.unMute(); player.setVolume(100);
+  player.loadVideoById({ videoId: id, startSeconds: cat.start, endSeconds: cat.start + S.clip });
+  watchStart();
+}
+
+// If the sound hasn't started a few seconds after a tap, the phone or browser blocked it.
+function watchStart() {
+  clearTimeout(startWatch);
+  startWatch = setTimeout(() => {
+    if (!clipStarted) $('ytMsg').textContent = "No sound yet? Tap Replay. (Phones and Brave sometimes block a page's first sound.)";
+  }, 4000);
+}
+
 async function play() {
   const s = cur(); if (!s || !S.key) return;
+  const ids = cachedIds(s);
+  if (player && ids && altIdx < ids.length) { loadClip(ids[altIdx]); prefetchNext(); return; }   // instant path, inside the tap
   try {
+    $('ytMsg').textContent = 'Finding the song...';
     await loadYT();
-    const ids = await lookup(cat.query(s));
-    if (altIdx >= ids.length) { $('ytMsg').textContent = 'No playable match found. Use "Open in YouTube Music".'; return; }
-    player.loadVideoById({ videoId: ids[altIdx], startSeconds: cat.start, endSeconds: cat.start + S.clip });
+    const found = await lookup(cat.query(s));
+    if (altIdx >= found.length) { $('ytMsg').textContent = 'No playable match found. Use "Open in YouTube Music".'; return; }
+    $('ytMsg').textContent = '';
+    loadClip(found[altIdx]); prefetchNext();
   } catch (e) {
     $('ytMsg').textContent = 'YouTube lookup failed: ' + e.message;
   }
 }
 
 function onState(e) {
-  if (e.data !== YT.PlayerState.ENDED) return;
-  stopClip(); revealed = true; render();
+  if (e.data === YT.PlayerState.PLAYING && !clipStarted) {
+    clipStarted = true; clearTimeout(startWatch); $('ytMsg').textContent = ''; startClip();
+    return;
+  }
+  if (e.data !== YT.PlayerState.ENDED || !clipStarted) return;
+  clipStarted = false; stopClip(); if (S.sfx) sfxScratch(); revealed = true; render();
   if (S.auto && R.pos < R.order.length) setTimeout(() => { if (revealed) nextSong(); }, 5000);
 }
 
