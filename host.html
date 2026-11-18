@@ -14,7 +14,9 @@
 <div id="setup" style="display:none">
   <h1 class="logo">DJ Bingo <small>host</small></h1>
   <div class="panel">
-    <b>Rounds</b> <span class="muted">a category and a win pattern for each</span>
+    <div class="row"><label style="margin:0">How many rounds
+      <select id="nRounds"></select></label>
+      <span class="muted">each round gets a category and a win pattern</span></div>
     <div class="row" id="rounds"></div>
     <div class="row" style="margin-top:8px">
       <label>Clip length (sec) <input id="clip" type="number" value="20" style="width:5em"></label>
@@ -45,9 +47,11 @@
     <div>
       <div class="panel stage">
         <div class="deck" id="deck">
-          <svg class="ring" viewBox="0 0 100 100"><circle class="bgc" cx="50" cy="50" r="46"/><circle class="fg" id="ringfg" cx="50" cy="50" r="46"/></svg>
-          <div class="vinyl"><div class="label" id="lbl"></div></div>
-          <div class="secs" id="timer"></div>
+          <svg class="ring" viewBox="-4 -4 108 108"><g id="ticks"></g><circle class="bgc" cx="50" cy="50" r="45"/><circle class="fg" id="ringfg" cx="50" cy="50" r="45"/></svg>
+          <div class="vinyl"><div class="label"></div></div>
+          <div class="sheen"></div>
+          <div class="hub"><b id="lbl"></b><small id="hubcap"></small></div>
+          <svg class="arm" viewBox="0 0 60 200"><path d="M40 20 L36 120 L28 152"/><rect class="head" x="20" y="148" width="16" height="26" rx="3" transform="rotate(14 28 160)"/><circle class="base" cx="40" cy="20" r="16"/><circle class="pin" cx="40" cy="20" r="5"/></svg>
         </div>
         <div class="eq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <div class="num" id="num">Ready</div>
@@ -100,7 +104,13 @@ const $ = id => document.getElementById(id);
 const S = JSON.parse(localStorage.getItem('djb_settings') || '{}');
 let G = JSON.parse(localStorage.getItem('djb_game') || 'null');
 let cats, cat, R, revealed = false, altIdx = 0, player = null, playerReady = null;
-const RING = 2 * Math.PI * 46;
+const RING = 2 * Math.PI * 45;
+// Clock-style tick marks around the countdown ring, a long one every 5.
+$('ticks').innerHTML = [...Array(60)].map((_, i) => {
+  const a = i * Math.PI / 30, r2 = i % 5 ? 51.5 : 53;
+  return `<line x1="${50 + 49.5 * Math.cos(a)}" y1="${50 + 49.5 * Math.sin(a)}" x2="${50 + r2 * Math.cos(a)}" y2="${50 + r2 * Math.sin(a)}"${i % 5 ? '' : ' class="big"'}/>`;
+}).join('');
+const hub = (n, cap) => { $('lbl').textContent = n; $('hubcap').textContent = cap; };
 
 const saveG = () => localStorage.setItem('djb_game', JSON.stringify(G));
 const saveS = () => localStorage.setItem('djb_settings', JSON.stringify(S));
@@ -108,14 +118,24 @@ const saveS = () => localStorage.setItem('djb_settings', JSON.stringify(S));
 // ---------- Setup ----------
 const opts = CATEGORIES.map(c => `<option value="${c.id}">${esc(c.name)} (${c.songs.length})</option>`).join('');
 const pats = '<option value="random">Random</option>' + Object.entries(PATTERNS).map(([k, v]) => `<option value="${k}">${v.name}</option>`).join('');
-$('rounds').innerHTML = ['T', 'N', 'A', 'D'].map((d, i) =>
-  `<label>Round ${i + 1}<br><select class="rc" data-d="${d}">${i ? '<option value="">(none)</option>' : ''}${opts}</select>
-   <br><select class="rp" data-d="random">${pats}</select></label>`).join('');
-[...$('rounds').querySelectorAll('select')].forEach(x => x.value = x.dataset.d);
+const MAX_ROUNDS = 6, DEF_CATS = ['T', 'N', 'A', 'D', 'E', 'M'];
+$('nRounds').innerHTML = [...Array(MAX_ROUNDS)].map((_, i) => `<option>${i + 1}</option>`).join('');
+$('nRounds').value = S.rounds || 4;
+// Draw one category + pattern picker per round, keeping what was already picked.
+function drawRounds() {
+  const old = [...$('rounds').children].map(l => [l.querySelector('.rc').value, l.querySelector('.rp').value]);
+  $('rounds').innerHTML = [...Array(+$('nRounds').value)].map((_, i) =>
+    `<label>Round ${i + 1}<br><select class="rc">${opts}</select><br><select class="rp">${pats}</select></label>`).join('');
+  [...$('rounds').children].forEach((l, i) => {
+    l.querySelector('.rc').value = old[i] ? old[i][0] : DEF_CATS[i];
+    l.querySelector('.rp').value = old[i] ? old[i][1] : 'random';
+  });
+}
+$('nRounds').onchange = drawRounds; drawRounds();
 $('key').value = S.key || ''; $('auto').checked = !!S.auto; $('clip').value = S.clip || 20; $('sfx').checked = S.sfx !== false;
 
 $('startGame').onclick = () => {
-  Object.assign(S, { key: $('key').value.trim(), auto: $('auto').checked, clip: +$('clip').value || 20, sfx: $('sfx').checked }); saveS();
+  Object.assign(S, { key: $('key').value.trim(), auto: $('auto').checked, clip: +$('clip').value || 20, sfx: $('sfx').checked, rounds: +$('nRounds').value }); saveS();
   const pk = [...$('rounds').querySelectorAll('.rp')].map(x => x.value);
   const picks = [...$('rounds').querySelectorAll('.rc')].map((x, i) => ({ cat: CATEGORIES.find(c => c.id === x.value), pattern: pk[i] })).filter(x => x.cat);
   // Random rounds get a shape not already used in this game.
@@ -136,6 +156,7 @@ function showGame() {
   $('rpat').innerHTML = patternHTML(R.pattern);
   $('rpatname').textContent = 'To win: ' + PATTERNS[R.pattern].name;
   $('codeShow').textContent = G.code;
+  $('codeShow').style.fontSize = G.code.length > 13 ? '1.45rem' : '';
   $('url').textContent = baseURL().replace(/^https?:\/\//, '').replace(/\/$/, '');
   $('qr').innerHTML = qrSVG(joinURL(G.code));
   $('printLink').href = 'print.html?g=' + G.code;
@@ -152,7 +173,7 @@ function cur() { return R.pos ? cat.songs[R.order[R.pos - 1]] : null; }
 function render() {
   const s = cur();
   $('num').textContent = s ? `Song ${R.pos} of ${R.order.length}` : 'Ready';
-  $('lbl').textContent = R.pos || '';
+  if (!tick) hub(R.pos || '', R.pos ? 'song' : '');
   const t = s ? (revealed ? s[0] : '?') : '';
   if ($('title').textContent !== t) { $('title').textContent = t; $('title').classList.remove('flip'); void $('title').offsetWidth; if (revealed && s) $('title').classList.add('flip'); }
   $('sub').textContent = s && revealed ? s[1] : '';
@@ -175,12 +196,14 @@ function startClip() {
   fg.style.transition = 'none'; fg.style.strokeDasharray = RING; fg.style.strokeDashoffset = 0;
   void fg.getBoundingClientRect();
   fg.style.transition = `stroke-dashoffset ${secs}s linear`; fg.style.strokeDashoffset = RING;
-  $('deck').classList.add('spin');
-  let left = secs; $('timer').textContent = left;
+  $('deck').classList.remove('hurry', 'done'); $('deck').classList.add('spin');
+  let left = secs; hub(left, 'sec');
   tick = setInterval(() => {
     left--;
-    $('timer').textContent = left > 0 ? left : '';
+    if (left > 0) hub(left, 'sec');
+    $('deck').classList.toggle('hurry', left > 0 && left <= 5);
     if (left <= 0) {
+      $('deck').classList.add('done'); setTimeout(() => $('deck').classList.remove('done'), 900);
       stopClip(); pauseSong();
       if (S.key && S.sfx) sfxScratch();
       if (!S.key) $('ytMsg').textContent = 'Stop the song';
@@ -191,7 +214,8 @@ function startClip() {
 function pauseSong() { clipStarted = false; clearTimeout(startWatch); if (player && player.pauseVideo) player.pauseVideo(); }
 function stopSong() { if (!cur()) return; pauseSong(); stopClip(); if (!revealed) { revealed = true; render(); } }
 function stopClip() {
-  clearInterval(tick); $('deck').classList.remove('spin'); $('timer').textContent = '';
+  clearInterval(tick); tick = null; $('deck').classList.remove('spin', 'hurry');
+  if (R) hub(R.pos || '', R.pos ? 'song' : '');
   const fg = $('ringfg'); fg.style.transition = 'none'; fg.style.strokeDasharray = RING; fg.style.strokeDashoffset = 0;
 }
 

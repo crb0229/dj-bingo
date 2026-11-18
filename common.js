@@ -1,5 +1,5 @@
 // Shared game logic. Cards are built from the game code + card number, so no server is needed.
-// A game is 1-4 rounds. Each round has a category and a win pattern; both are in the game code,
+// A game is 1-6 rounds. Each round has a category and a win pattern; both are in the game code,
 // e.g. "TLNVAHDF-K7Q" = TV Tunes/line, Name Game/V, Artists/H, Drinking/full, then 3 random characters.
 // Each round's card is 3 rows x 5 columns (B-I-N-G-O), no free square.
 
@@ -71,7 +71,7 @@ function newCode(rounds) {
 function parseCode(raw) {
   const c = (raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
   const head = c.slice(0, -3), tail = c.slice(-3);
-  if (!head || head.length % 2 || head.length > 8) return null;
+  if (!head || head.length % 2 || head.length > 12) return null;
   const cats = [], pats = [];
   for (let i = 0; i < head.length; i += 2) {
     const cat = CATEGORIES.find(k => k.id === head[i]), pat = patternByLetter(head[i + 1]);

@@ -31,7 +31,7 @@ function make() {
   for (let n = from; n < from + count; n++) {
     h += `<div class="pcard panel"><div class="sheethead"><div class="qr">${qrSVG(joinURL(p.code, n))}</div>
       <h2 style="flex:1;margin:0">DJ Bingo &middot; Card #${n}<br><span class="muted" style="font-size:.8rem">Game ${p.code}</span></h2>
-      <div class="namebox">Name:</div></div><div class="sheet">`;
+      <div class="namebox">Name:</div></div><div class="sheet${p.cats.length > 4 ? ' three' : ''}">`;
     p.cats.forEach((c, r) => h += `<div><h3>Round ${r + 1} - ${esc(c.name)} &middot; ${PATTERNS[p.pats[r]].name}</h3>${cardHTML(c, makeCard(p.code, c, n, r))}</div>`);
     h += '</div></div>';
   }
