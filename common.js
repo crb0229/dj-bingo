@@ -58,6 +58,8 @@ const PATTERNS = {
   v: { name: 'V shape', cells: [0, 4, 6, 8, 12] },
   h: { name: 'H shape', cells: [0, 5, 10, 4, 9, 14, 6, 7, 8] },
   corners: { name: 'Four corners', cells: [0, 4, 10, 14] },
+  x: { name: 'X shape', cells: [0, 4, 6, 7, 8, 10, 14] },
+  cross: { name: 'Cross (plus sign)', cells: [2, 5, 6, 7, 8, 9, 12] },
   full: { name: 'Full card', cells: [...Array(15).keys()] }
 };
 
