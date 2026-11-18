@@ -3,7 +3,7 @@
 A free DJ music bingo game for family nights. It runs entirely in the browser, with no server, no accounts and no cost.
 
 ## How a game works
-1. **Host:** open `host.html` on a laptop. Cast the Chrome tab to the TV (menu, then Cast, then Cast tab) so the sound comes through the TV too. Pick up to 4 rounds, with a category and a win pattern for each, then press **Start game**. The defaults match the restaurant game: a line across, then a V, then an H, then a full card. Two lines across, four corners, an X and a cross (plus sign) are also available. The TV shows a picture of the current round's pattern.
+1. **Host:** open `host.html` on a laptop. Cast the Chrome tab to the TV (menu, then Cast, then Cast tab) so the sound comes through the TV too. Pick up to 4 rounds, with a category and a win pattern for each, then press **Start game**. Patterns: one line across, two lines across, a V, an H, four corners, an X, a cross (plus sign) or a full card. The default is Random, which gives each round a different shape when the game starts. The TV shows a picture of the current round's pattern.
 2. **Players:** open the site on a phone and type the code shown on the TV, for example `TNAD-K7Q`. Each phone gets one card number with a 3x5 B-I-N-G-O grid for each round, and the phone remembers its card if the page is refreshed.
 3. **Paper cards:** press **Print cards** to get one landscape sheet per player with every round on it, laid out like a restaurant bingo sheet. Printed cards are numbered from #1001 so they never match a phone card.
 4. Press **Next song**. The title stays hidden as "?" until you press **Reveal**, or until the clip ends in automatic mode.

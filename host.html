@@ -78,8 +78,8 @@ const saveS = () => localStorage.setItem('djb_settings', JSON.stringify(S));
 
 // ---------- Setup ----------
 const opts = CATEGORIES.map(c => `<option value="${c.id}">${esc(c.name)} (${c.songs.length})</option>`).join('');
-const pats = Object.entries(PATTERNS).map(([k, v]) => `<option value="${k}">${v.name}</option>`).join('');
-$('rounds').innerHTML = [['T', 'line'], ['N', 'v'], ['A', 'h'], ['D', 'full']].map(([d, w], i) =>
+const pats = '<option value="random">Random</option>' + Object.entries(PATTERNS).map(([k, v]) => `<option value="${k}">${v.name}</option>`).join('');
+$('rounds').innerHTML = [['T', 'random'], ['N', 'random'], ['A', 'random'], ['D', 'random']].map(([d, w], i) =>
   `<label>Round ${i + 1}<br><select class="rc" data-d="${d}">${i ? '<option value="">(none)</option>' : ''}${opts}</select>
    <br><select class="rp" data-d="${w}">${pats}</select></label>`).join('');
 [...$('rounds').querySelectorAll('select')].forEach(x => x.value = x.dataset.d);
@@ -90,6 +90,9 @@ $('startGame').onclick = () => {
   const pk = [...$('rounds').querySelectorAll('.rp')].map(x => x.value);
   const picks = [...$('rounds').querySelectorAll('.rc')].map((x, i) => ({ c: CATEGORIES.find(c => c.id === x.value), p: pk[i] })).filter(x => x.c);
   const cats = picks.map(x => x.c);
+  // Random rounds get a shape not already used in this game.
+  const pool = shuffle(Object.keys(PATTERNS).filter(k => !picks.some(x => x.p === k)));
+  picks.forEach(x => { if (x.p === 'random') x.p = pool.pop() || 'line'; });
   G = { code: newCode(cats), r: 0,
         rounds: picks.map(x => ({ order: shuffle([...x.c.songs.keys()]), pos: 0, pattern: x.p })) };
   saveG(); showGame();
