@@ -1,29 +1,46 @@
 <!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DJ Bingo card</title><link rel="stylesheet" href="style.css">
+<title>DJ Bingo card</title>
+<meta name="theme-color" content="#0d0a18">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="DJ Bingo">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Monoton&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head><body class="player"><div class="wrap">
-<div id="head"></div>
+<div class="phead">
+  <h1 class="logo">DJ Bingo</h1>
+  <div class="cardno">Card<b id="cardno"></b></div>
+</div>
+<div id="tip" class="tip" style="display:none">
+  <span>Keep DJ Bingo on your phone: tap <b>Share</b>, then <b>Add to Home Screen</b>.</span>
+  <button class="alt" id="tipX">Got it</button>
+</div>
 <div class="tabs" id="tabs"></div>
-<div class="rname" id="rname"></div>
+<div class="rinfo">
+  <div><b id="rname"></b><div class="muted" id="rpatname"></div></div>
+  <div id="rpat"></div>
+</div>
 <div id="card"></div>
-<div class="row" style="justify-content:center;margin-top:14px">
+<div class="hint" id="hint"></div>
+<div class="row" style="justify-content:center;margin-top:12px">
   <button id="bingo">BINGO!</button>
   <button class="alt" id="clear">Clear round</button>
   <a class="btn alt" href="index.html">Leave</a>
 </div>
 <p class="muted" style="text-align:center">Tap a square when you hear that song. Tap again to unmark.</p>
 </div>
-<div class="big-bingo" id="big">BINGO!<br>Card #<b id="bigno"></b><span id="bigr"></span><span style="font-size:1rem;font-weight:normal">Show this to the host. Tap to close.</span></div>
+<div class="big-bingo" id="big">BINGO!<div>Card <b id="bigno"></b></div><span id="bigr"></span><span style="font-size:1rem;font-weight:normal">Show this to the host. Tap to close.</span></div>
 <script src="songs.js"></script><script src="common.js"></script>
 <script>
 const $ = id => document.getElementById(id);
 const q = new URLSearchParams(location.search);
 const p = parseCode(q.get('g'));
-if (!p) location.href = 'index.html';
-const { code, cats } = p;
+if (!p) location.href = 'index.html?bad=1';
+const { code, cats, pats } = p;
 
-// Card number: from the link, or picked at random once per game and remembered on this phone.
+// Card number: from the link (printed-sheet QR codes include it), or picked at random once per game and remembered.
 const numKey = 'djb_num_' + code;
 const n = parseInt(q.get('n')) || parseInt(localStorage.getItem(numKey)) || (1 + Math.floor(Math.random() * 999));
 localStorage.setItem(numKey, n);
@@ -32,26 +49,48 @@ const markKey = 'djb_marks_' + code + '_' + n;
 const marks = JSON.parse(localStorage.getItem(markKey) || 'null') || cats.map(() => []);
 let r = +(localStorage.getItem(markKey + '_r') || 0);
 
-$('head').innerHTML = `<div class="cardno">Game ${code} &middot; card #<b>${n}</b></div>`;
-$('tabs').innerHTML = cats.map((c, i) => `<button data-r="${i}">Round ${i + 1}</button>`).join('');
-$('tabs').onclick = e => { if (e.target.dataset.r) { r = +e.target.dataset.r; draw(); } };
+$('cardno').textContent = '#' + n;
+$('tabs').innerHTML = cats.map((c, i) => `<button data-r="${i}">${catIcon(c)}Round ${i + 1}</button>`).join('');
+$('tabs').onclick = e => { const b = e.target.closest('button'); if (b) { r = +b.dataset.r; draw(); } };
 
 function draw() {
-  const set = new Set(marks[r]);
-  $('rname').textContent = `Round ${r + 1}: ${cats[r].name}`;
-  $('card').innerHTML = cardHTML(cats[r], makeCard(code, cats[r], n, r), i => set.has(i));
+  const set = new Set(marks[r]), cat = cats[r], marked = i => set.has(i);
+  document.body.style.setProperty('--accent', catColor(cat));
+  $('rname').innerHTML = esc(cat.name);
+  $('rpatname').textContent = 'To win: ' + PATTERNS[pats[r]].name;
+  $('rpat').innerHTML = patternHTML(pats[r]);
+  $('card').innerHTML = cardHTML(cat, makeCard(code, cat, n, r), marked);
   [...$('tabs').children].forEach((b, i) => b.className = i === r ? '' : 'alt');
+
+  const need = squaresNeeded(marked, pats[r]);
+  $('hint').textContent = need === 0 ? 'You have it! Tap BINGO!' : need === 1 ? 'One away!' : need === 2 ? 'Two away' : '';
+  $('hint').className = 'hint' + (need <= 1 ? ' hot' : '');
+  $('card').className = need === 1 ? 'close' : '';
+  $('bingo').className = need === 0 ? 'ready' : '';
+
   localStorage.setItem(markKey, JSON.stringify(marks));
   localStorage.setItem(markKey + '_r', r);
 }
 $('card').onclick = e => {
   const sq = e.target.closest('.sq'); if (!sq) return;
   const i = +sq.dataset.i, m = marks[r];
-  m.includes(i) ? m.splice(m.indexOf(i), 1) : m.push(i); draw();
+  m.includes(i) ? m.splice(m.indexOf(i), 1) : m.push(i);
+  if (navigator.vibrate) navigator.vibrate(15);
+  draw();
 };
 $('clear').onclick = () => { if (confirm('Clear your marks for this round?')) { marks[r] = []; draw(); } };
-$('bingo').onclick = () => { $('bigno').textContent = n; $('bigr').textContent = 'Round ' + (r + 1); $('big').style.display = 'flex'; };
+$('bingo').onclick = () => {
+  $('bigno').textContent = '#' + n; $('bigr').textContent = 'Round ' + (r + 1);
+  $('big').style.display = 'flex'; confetti();
+};
 $('big').onclick = e => e.currentTarget.style.display = 'none';
+
+// One-time "Add to Home Screen" tip, skipped when already opened from the home screen.
+const standalone = navigator.standalone || matchMedia('(display-mode: standalone)').matches;
+if (!standalone && !localStorage.getItem('djb_tip')) $('tip').style.display = '';
+$('tipX').onclick = () => { localStorage.setItem('djb_tip', '1'); $('tip').style.display = 'none'; };
+
+keepAwake();
 draw();
 </script>
 </body></html>

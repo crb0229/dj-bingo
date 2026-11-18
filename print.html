@@ -1,21 +1,25 @@
 <!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DJ Bingo printable cards</title><link rel="stylesheet" href="style.css">
+<title>DJ Bingo printable cards</title>
+<link rel="icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Monoton&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head><body><div class="wrap">
 <div class="panel noprint">
-  <h1>Printable cards</h1>
+  <h1 class="logo">Printable cards</h1>
   <div class="row">
-    <label>Game code <input id="code" size="10"></label>
+    <label>Game code <input id="code" size="14"></label>
     <label>First card # <input id="from" type="number" value="1001" style="width:7em"></label>
     <label>How many <input id="count" type="number" value="6" style="width:5em"></label>
   </div>
   <p class="row"><button id="make">Show cards</button><button class="alt" onclick="print()">Print</button></p>
-  <p class="muted">One sheet per player with every round on it. Printed cards start at #1001 so they never match a phone card. Print in landscape.</p>
+  <p class="muted">One landscape sheet per player with every round on it. Printed cards start at #1001 so they never match a phone card.
+    The QR code on each sheet opens that same card on a phone.</p>
 </div>
 <div id="out"></div>
 </div>
-<script src="songs.js"></script><script src="common.js"></script>
+<script src="qrcode.js"></script><script src="songs.js"></script><script src="common.js"></script>
 <script>
 const q = new URLSearchParams(location.search);
 document.getElementById('code').value = q.get('g') || '';
@@ -25,8 +29,10 @@ function make() {
   const from = +document.getElementById('from').value, count = Math.min(+document.getElementById('count').value, 100);
   let h = '';
   for (let n = from; n < from + count; n++) {
-    h += `<div class="pcard panel"><div class="sheethead"><h2>DJ Bingo &middot; Card #${n} &middot; ${p.code}</h2><div class="namebox">Name:</div></div><div class="sheet">`;
-    p.cats.forEach((c, r) => h += `<div><h3>Round ${r + 1} - ${esc(c.name)}</h3>${cardHTML(c, makeCard(p.code, c, n, r))}</div>`);
+    h += `<div class="pcard panel"><div class="sheethead"><div class="qr">${qrSVG(joinURL(p.code, n))}</div>
+      <h2 style="flex:1;margin:0">DJ Bingo &middot; Card #${n}<br><span class="muted" style="font-size:.8rem">Game ${p.code}</span></h2>
+      <div class="namebox">Name:</div></div><div class="sheet">`;
+    p.cats.forEach((c, r) => h += `<div><h3>Round ${r + 1} - ${esc(c.name)} &middot; ${PATTERNS[p.pats[r]].name}</h3>${cardHTML(c, makeCard(p.code, c, n, r))}</div>`);
     h += '</div></div>';
   }
   document.getElementById('out').innerHTML = h;

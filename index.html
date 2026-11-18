@@ -1,25 +1,34 @@
 <!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DJ Bingo</title><link rel="stylesheet" href="style.css">
+<title>DJ Bingo</title>
+<meta name="theme-color" content="#0d0a18">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="DJ Bingo">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Monoton&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head><body><div class="wrap" style="max-width:520px">
-<h1>DJ Bingo</h1>
+<h1 class="logo" style="text-align:center">DJ Bingo</h1>
 <div class="panel">
-  <label for="code">Game code (from the TV screen)</label>
-  <div class="row"><input id="code" placeholder="TNAD-K7Q" autocapitalize="characters" style="flex:1">
+  <b>Join a game</b>
+  <p class="muted">Scan the QR code on the TV with your camera, or type the game code shown under it.</p>
+  <div class="row"><input id="code" placeholder="TLNVAHDF-K7Q" autocapitalize="characters" autocomplete="off" style="flex:1">
   <button id="join">Join</button></div>
   <p id="err" class="muted"></p>
 </div>
 <div class="panel">
   <a class="btn alt" href="host.html">Host a game</a>
-  <p class="muted">Run the host screen on a laptop or cast the Chrome tab to the TV.</p>
+  <p class="muted">Run the host screen on a laptop and cast the Chrome tab to the TV, or use a phone with a Bluetooth speaker.</p>
 </div>
 </div>
 <script src="songs.js"></script><script src="common.js"></script>
 <script>
+const err = "That code doesn't look right. Type it exactly as shown on the TV.";
+if (new URLSearchParams(location.search).get('bad')) document.getElementById('err').textContent = err;
 const go = () => {
   const p = parseCode(document.getElementById('code').value);
-  if (!p) { document.getElementById('err').textContent = "That code doesn't look right. Type it exactly as shown on the TV, like TNAD-K7Q."; return; }
+  if (!p) { document.getElementById('err').textContent = err; return; }
   location.href = 'play.html?g=' + p.code;
 };
 document.getElementById('join').onclick = go;
