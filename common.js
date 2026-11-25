@@ -116,7 +116,11 @@ const LOOK = {
   D: { color: '#ff4fa3', icon: '<path d="M4 4h16l-8 9z"/><path d="M12 13v7M8 20h8"/>' },
   E: { color: '#b06bff', icon: '<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="8.5" cy="12" r="2"/><circle cx="15.5" cy="12" r="2"/>' },
   M: { color: '#ff8a3d', icon: '<rect x="3" y="5" width="18" height="14" rx="1"/><path d="M7 5v14M17 5v14M3 9h4M3 15h4M17 9h4M17 15h4"/>' },
-  X: { color: '#4bd67b', icon: '<path d="M12 2l5 7h-3l4 6h-4l3 5H7l3-5H6l4-6H7z"/>' }
+  X: { color: '#4bd67b', icon: '<path d="M12 2l5 7h-3l4 6h-4l3 5H7l3-5H6l4-6H7z"/>' },
+  F: { color: '#ff5f5f', icon: '<path d="M6 20L12 4l6 16M8.5 14h7"/>' },
+  B: { color: '#5f8bff', icon: '<path d="M7 4h6a4 4 0 0 1 0 8H7zM7 12h7a4 4 0 0 1 0 8H7z"/>' },
+  C: { color: '#2ee6c8', icon: '<path d="M18 7a7 7 0 1 0 0 10"/>' },
+  G: { color: '#e6e62e', icon: '<path d="M6 4h5a8 8 0 0 1 0 16H6z"/>' }
 };
 function catIcon(cat) {
   const l = LOOK[cat.id] || { color: '#ff4fa3', icon: '<path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>' };

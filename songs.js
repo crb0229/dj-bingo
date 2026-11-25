@@ -205,5 +205,103 @@ window.CATEGORIES = [
       ['Please Come Home for Christmas', 'Eagles'], ['Step Into Christmas', 'Elton John'],
       ['Hark! The Herald Angels Sing', 'Nat King Cole'], ['We Wish You a Merry Christmas', 'Bing Crosby']
     ]
+  },
+  {
+    id: 'F', name: 'All About the A', start: 40,
+    query: s => s[0] + ' ' + s[1],
+    songs: [
+      ['Alone', 'Heart'], ['All Night Long', 'Lionel Richie'], ['Africa', 'Toto'],
+      ['All She Wants to Do Is Dance', 'Don Henley'], ['Attention', 'Charlie Puth'], ['Absolutely (Story of a Girl)', 'Nine Days'],
+      ['Alley Oop', 'The Hollywood Argyles'], ['All I Wanna Do', 'Sheryl Crow'], ['Another Night', 'Real McCoy'],
+      ['All I Need', 'Jack Wagner'], ['At the Hop', 'Danny & the Juniors'], ['Allentown', 'Billy Joel'],
+      ['A Thousand Miles', 'Vanessa Carlton'], ['Always Be My Baby', 'Mariah Carey'], ['All Right', 'Christopher Cross'],
+      ['Abracadabra', 'Steve Miller Band'], ['Against All Odds', 'Phil Collins'],
+      ["Ain't No Mountain High Enough", 'Marvin Gaye & Tammi Terrell'], ['All Star', 'Smash Mouth'],
+      ['Always Something There to Remind Me', 'Naked Eyes'], ['American Pie', 'Don McLean'],
+      ['American Girl', 'Tom Petty'], ['Another One Bites the Dust', 'Queen'], ['Any Way You Want It', 'Journey'],
+      ['Achy Breaky Heart', 'Billy Ray Cyrus'], ['ABC', 'The Jackson 5'], ['Aquarius/Let the Sunshine In', 'The 5th Dimension'],
+      ['All You Need Is Love', 'The Beatles'], ['All Shook Up', 'Elvis Presley'], ['American Woman', 'The Guess Who'],
+      ['Angel of the Morning', 'Juice Newton'], ['All Out of Love', 'Air Supply'], ['Addicted to Love', 'Robert Palmer'],
+      ['All the Small Things', 'blink-182'], ['Apologize', 'Timbaland ft. OneRepublic'], ['As It Was', 'Harry Styles'],
+      ['All of Me', 'John Legend'], ["Ain't Too Proud to Beg", 'The Temptations'], ['A Little Less Conversation', 'Elvis Presley'],
+      ['Always on My Mind', 'Willie Nelson'], ['Amarillo by Morning', 'George Strait'], ["Ain't No Sunshine", 'Bill Withers'],
+      ['Accidentally in Love', 'Counting Crows'], ['A Whiter Shade of Pale', 'Procol Harum'], ['At Last', 'Etta James'],
+      ['Axel F', 'Harold Faltermeyer'], ['Around the World', 'Daft Punk'], ['Animal', 'Neon Trees'],
+      ["A Hard Day's Night", 'The Beatles'], ['All Along the Watchtower', 'Jimi Hendrix'], ['America', 'Neil Diamond'],
+      ["Ain't That a Shame", 'Fats Domino'], ['Adventure of a Lifetime', 'Coldplay'], ['Another Brick in the Wall', 'Pink Floyd']
+    ]
+  },
+  {
+    id: 'B', name: 'Begins With B', start: 40,
+    query: s => s[0] + ' ' + s[1],
+    songs: [
+      ['Babe', 'Styx'], ['Baby-Baby-Baby', 'TLC'], ["Breakfast at Tiffany's", 'Deep Blue Something'],
+      ['Barbara Ann', 'The Beach Boys'], ['Boogie Wonderland', 'Earth, Wind & Fire'], ['Baby Baby', 'Amy Grant'],
+      ['Back in My Arms Again', 'The Supremes'], ['Bad Case of Loving You', 'Robert Palmer'], ['Brown Eyed Girl', 'Van Morrison'],
+      ['Baby Got Back', 'Sir Mix-a-Lot'], ['Band on the Run', 'Paul McCartney & Wings'], ['Barracuda', 'Heart'],
+      ['Bills, Bills, Bills', "Destiny's Child"], ['Bust a Move', 'Young MC'], ['Breaking Up Is Hard to Do', 'Neil Sedaka'],
+      ['Bohemian Rhapsody', 'Queen'], ['Billie Jean', 'Michael Jackson'], ['Beat It', 'Michael Jackson'],
+      ['Born to Run', 'Bruce Springsteen'], ['Born in the U.S.A.', 'Bruce Springsteen'], ['Back in Black', 'AC/DC'],
+      ['Bad Moon Rising', 'Creedence Clearwater Revival'], ['Blinding Lights', 'The Weeknd'], ['Beautiful Day', 'U2'],
+      ['Burning Love', 'Elvis Presley'], ['Be My Baby', 'The Ronettes'], ['Blue Suede Shoes', 'Carl Perkins'],
+      ['Build Me Up Buttercup', 'The Foundations'], ["Brandy (You're a Fine Girl)", 'Looking Glass'],
+      ['Bennie and the Jets', 'Elton John'], ['Born to Be Wild', 'Steppenwolf'], ['Black Velvet', 'Alannah Myles'],
+      ['Bette Davis Eyes', 'Kim Carnes'], ['Big Shot', 'Billy Joel'], ['Bye Bye Bye', '*NSYNC'],
+      ['Boogie Shoes', 'KC and the Sunshine Band'], ['Ballroom Blitz', 'Sweet'], ['Bad to the Bone', 'George Thorogood'],
+      ['Blue (Da Ba Dee)', 'Eiffel 65'], ['Best of My Love', 'The Emotions'], ['Believe', 'Cher'],
+      ['Before He Cheats', 'Carrie Underwood'], ["Boot Scootin' Boogie", 'Brooks & Dunn'], ['Budapest', 'George Ezra'],
+      ['Bring It On Home to Me', 'Sam Cooke'], ["Big Girls Don't Cry", 'The Four Seasons'], ['Brick House', 'Commodores'],
+      ['Boys of Summer', 'Don Henley'], ['Bitter Sweet Symphony', 'The Verve'], ['Bad Blood', 'Taylor Swift'],
+      ['Blue Bayou', 'Linda Ronstadt'], ['Bang a Gong (Get It On)', 'T. Rex']
+    ]
+  },
+  {
+    id: 'C', name: 'Can You C', start: 40,
+    query: s => s[0] + ' ' + s[1],
+    songs: [
+      ['Calling All Angels', 'Train'], ["Can't Get You Out of My Head", 'Kylie Minogue'], ['Cherish', 'The Association'],
+      ['Conga', 'Gloria Estefan & Miami Sound Machine'], ['Chattahoochee', 'Alan Jackson'], ["Can't Stop", 'After 7'],
+      ['Cherry Cherry', 'Neil Diamond'], ['Cherry Bomb', 'John Cougar Mellencamp'], ['Crazy', 'Gnarls Barkley'],
+      ['Come Sail Away', 'Styx'], ["Can't Help Falling in Love", 'UB40'], ["Can't Smile Without You", 'Barry Manilow'],
+      ['China Girl', 'David Bowie'], ['Come Go with Me', 'Exposé'], ['Centerfold', 'The J. Geils Band'],
+      ['Celebration', 'Kool & the Gang'], ['Crazy Little Thing Called Love', 'Queen'], ['Call Me Maybe', 'Carly Rae Jepsen'],
+      ["Can't Stop the Feeling!", 'Justin Timberlake'], ['Careless Whisper', 'George Michael'],
+      ['California Girls', 'The Beach Boys'], ['Cold as Ice', 'Foreigner'], ['Come On Eileen', "Dexys Midnight Runners"],
+      ['Crocodile Rock', 'Elton John'], ['Crazy Train', 'Ozzy Osbourne'], ['Chain of Fools', 'Aretha Franklin'],
+      ['Cecilia', 'Simon & Garfunkel'], ['Cruel Summer', 'Bananarama'], ['Cupid', 'Sam Cooke'],
+      ['Cotton Eye Joe', 'Rednex'], ['Chantilly Lace', 'The Big Bopper'], ['Come Together', 'The Beatles'],
+      ["Cracklin' Rosie", 'Neil Diamond'], ['Clocks', 'Coldplay'], ['Complicated', 'Avril Lavigne'],
+      ['Crazy for You', 'Madonna'], ["Cruisin'", 'Smokey Robinson'], ['Chasing Cars', 'Snow Patrol'],
+      ['Counting Stars', 'OneRepublic'], ['Copacabana', 'Barry Manilow'], ['Car Wash', 'Rose Royce'],
+      ["Cat's in the Cradle", 'Harry Chapin'], ['Cool Change', 'Little River Band'], ['Crimson and Clover', 'Tommy James & the Shondells'],
+      ['Cheeseburger in Paradise', 'Jimmy Buffett'], ['Cowboy Take Me Away', 'Dixie Chicks'], ['Cruise', 'Florida Georgia Line'],
+      ["Can't Buy Me Love", 'The Beatles'], ['Candle in the Wind', 'Elton John'], ['Cheap Thrills', 'Sia'],
+      ['Close to You', 'Carpenters'], ['Cold Hearted', 'Paula Abdul']
+    ]
+  },
+  {
+    id: 'G', name: "Doin' the D", start: 40,
+    query: s => s[0] + ' ' + s[1],
+    songs: [
+      ['Day Tripper', 'The Beatles'], ["Dead Man's Party", 'Oingo Boingo'], ["Don't Dream It's Over", 'Crowded House'],
+      ['Drive', 'The Cars'], ['Daydream Believer', 'The Monkees'], ['Danger Zone', 'Kenny Loggins'],
+      ['Devil with a Blue Dress On', 'Mitch Ryder & the Detroit Wheels'], ['Do You Know the Way to San Jose', 'Dionne Warwick'],
+      ["Don't Look Back", 'Boston'], ['Dust in the Wind', 'Kansas'], ['Daniel', 'Elton John'],
+      ['Do Wah Diddy Diddy', 'Manfred Mann'], ["Don't Change", 'INXS'], ['Drunk on a Plane', 'Dierks Bentley'],
+      ['Drift Away', 'Dobie Gray'], ['Dancing Queen', 'ABBA'], ["Don't Stop Believin'", 'Journey'],
+      ["Don't Stop Me Now", 'Queen'], ["Don't Stop", 'Fleetwood Mac'], ['Dancing in the Dark', 'Bruce Springsteen'],
+      ['Dancing in the Street', 'Martha and the Vandellas'], ['December, 1963 (Oh, What a Night)', 'The Four Seasons'],
+      ["Don't You (Forget About Me)", 'Simple Minds'], ['Dreams', 'Fleetwood Mac'], ['Dream On', 'Aerosmith'],
+      ['Dancing on the Ceiling', 'Lionel Richie'], ["Don't Worry, Be Happy", 'Bobby McFerrin'], ['Down Under', 'Men at Work'],
+      ['Do You Believe in Magic', "The Lovin' Spoonful"], ['Do You Love Me', 'The Contours'], ["Don't Be Cruel", 'Elvis Presley'],
+      ['Daydream', "The Lovin' Spoonful"], ['Disco Inferno', 'The Trammps'], ["Don't Go Breaking My Heart", 'Elton John & Kiki Dee'],
+      ['Dynamite', 'BTS'], ['Despacito', 'Luis Fonsi ft. Daddy Yankee'], ["Don't Start Now", 'Dua Lipa'],
+      ['Dancing with Myself', 'Billy Idol'], ['Detroit Rock City', 'KISS'], ['Domino', 'Jessie J'],
+      ['Do It Again', 'Steely Dan'], ["Don't Let the Sun Go Down on Me", 'Elton John'], ["Don't Speak", 'No Doubt'],
+      ['Desperado', 'Eagles'], ['Dixieland Delight', 'Alabama'], ['Doo Wop (That Thing)', 'Lauryn Hill'],
+      ['Dance the Night', 'Dua Lipa'], ['Down on the Corner', 'Creedence Clearwater Revival'],
+      ['Do That to Me One More Time', 'Captain & Tennille'], ["Don't Rain on My Parade", 'Barbra Streisand'],
+      ['Diamond Girl', 'Seals and Crofts'], ['Dirty Laundry', 'Don Henley']
+    ]
   }
 ];
