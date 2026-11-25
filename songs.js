@@ -470,5 +470,54 @@ window.CATEGORIES = [
       ['Rhode Island Is Famous for You', 'Blossom Dearie'], ['Dakota', 'Stereophonics'],
       ['Missouri Waltz', 'Bing Crosby']
     ]
+  },
+  {
+    id: 'W', name: 'Around the World', start: 40,
+    query: s => s[0] + ' ' + s[1],
+    songs: [
+      ['Africa', 'Toto'], ['Back in the U.S.S.R.', 'The Beatles'], ['Born in the U.S.A.', 'Bruce Springsteen'],
+      ['Living in America', 'James Brown'], ['America', 'Neil Diamond'], ['Panama', 'Van Halen'],
+      ['Mexico', 'James Taylor'], ['Jamaica Farewell', 'Harry Belafonte'], ['China Girl', 'David Bowie'],
+      ['Big in Japan', 'Alphaville'], ['Brazil', 'Frank Sinatra'], ['Cuba', 'Gibson Brothers'],
+      ['Kids in America', 'Kim Wilde'], ['Party in the U.S.A.', 'Miley Cyrus'],
+      ['Back in the U.S.A.', 'Chuck Berry'], ['R.O.C.K. in the U.S.A.', 'John Mellencamp'],
+      ['England Swings', 'Roger Miller'], ['Cambodia', 'Kim Wilde'], ["Don't Cry for Me Argentina", 'Madonna'],
+      ['Jamaica Say You Will', 'Jackson Browne'], ['American Pie', 'Don McLean'], ['American Girl', 'Tom Petty'],
+      ['American Woman', 'The Guess Who'], ['American Kids', 'Kenny Chesney'], ['Only in America', 'Brooks & Dunn'],
+      ['Walk Like an Egyptian', 'The Bangles'], ['Spanish Flea', 'Herb Alpert & the Tijuana Brass'],
+      ['Spanish Eyes', 'Al Martino'], ['Russians', 'Sting'], ['Mexican Radio', 'Wall of Voodoo'],
+      ['Holiday in Spain', 'Counting Crows'], ['Israelites', 'Desmond Dekker'], ['God Bless America', 'Kate Smith'],
+      ['America the Beautiful', 'Ray Charles'], ['Made in America', 'Toby Keith'],
+      ['Young Americans', 'David Bowie'], ['Living in the U.S.A.', 'Steve Miller Band'],
+      ['Arabian Nights', 'Aladdin soundtrack'], ['China Grove', 'The Doobie Brothers'], ['American Honey', 'Lady A'],
+      ['Under African Skies', 'Paul Simon'], ["French Kissin' in the USA", 'Debbie Harry'],
+      ['Bahama Mama', 'Boney M.']
+    ]
+  },
+  {
+    id: 'R', name: 'Road Trip', start: 40,
+    query: s => s[0] + ' ' + s[1],
+    songs: [
+      ['Route 66', 'Nat King Cole'], ['Highway to Hell', 'AC/DC'], ['Ventura Highway', 'America'],
+      ['Life Is a Highway', 'Tom Cochrane'], ['Highway Star', 'Deep Purple'], ['Highway 61 Revisited', 'Bob Dylan'],
+      ['The Long and Winding Road', 'The Beatles'], ['Hit the Road Jack', 'Ray Charles'],
+      ['On the Road Again', 'Willie Nelson'], ['Take Me Home, Country Roads', 'John Denver'],
+      ['Goodbye Yellow Brick Road', 'Elton John'], ['Thunder Road', 'Bruce Springsteen'],
+      ['Road to Nowhere', 'Talking Heads'], ['Copperhead Road', 'Steve Earle'], ['Penny Lane', 'The Beatles'],
+      ['Electric Avenue', 'Eddy Grant'], ['Boulevard of Broken Dreams', 'Green Day'],
+      ['Dancing in the Street', 'Martha and the Vandellas'], ['Where the Streets Have No Name', 'U2'],
+      ['Baker Street', 'Gerry Rafferty'], ['Lost Highway', 'Hank Williams'], ['Highwayman', 'The Highwaymen'],
+      ['Freeway of Love', 'Aretha Franklin'], ['Interstate Love Song', 'Stone Temple Pilots'],
+      ['Six Days on the Road', 'Dave Dudley'], ['King of the Road', 'Roger Miller'],
+      ["Highway Don't Care", 'Tim McGraw ft. Taylor Swift'], ["Road Trippin'", 'Red Hot Chili Peppers'],
+      ['Down the Road', 'Kenny Chesney'], ['Lonely Avenue', 'Ray Charles'], ['Main Street', 'Bob Seger'],
+      ['Street Life', 'The Crusaders'], ['Bleecker Street', 'Simon & Garfunkel'],
+      ['On the Street Where You Live', 'Vic Damone'], ['Positively 4th Street', 'Bob Dylan'],
+      ['Roadhouse Blues', 'The Doors'], ['Holiday Road', 'Lindsey Buckingham'],
+      ['Highway 20 Ride', 'Zac Brown Band'], ['End of the Road', 'Boyz II Men'], ['Crossroads', 'Cream'],
+      ['Streets of Laredo', 'Marty Robbins'], ['Old Town Road', 'Lil Nas X ft. Billy Ray Cyrus'],
+      ['Dirt Road Anthem', 'Jason Aldean'], ['Boulevard', 'Jackson Browne'],
+      ['Two Lane Highway', 'Pure Prairie League']
+    ]
   }
 ];

@@ -126,7 +126,9 @@ const LOOK = {
   K: { color: '#ffa05f', icon: '<path d="M18 7a7 7 0 1 0 1 7h-6"/>' },
   H: { color: '#9f8bff', icon: '<path d="M6 4v16M18 4v16M6 12h12"/>' },
   U: { color: '#5fd0ff', icon: '<path d="M3 21h18M5 21V10h4v11M9 21V4h6v17M15 21v-8h4v8"/>' },
-  S: { color: '#ffd05f', icon: '<path d="M12 21s-7-7-7-12a7 7 0 0 1 14 0c0 5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/>' }
+  S: { color: '#ffd05f', icon: '<path d="M12 21s-7-7-7-12a7 7 0 0 1 14 0c0 5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/>' },
+  W: { color: '#5fffb0', icon: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>' },
+  R: { color: '#c0c0c0', icon: '<path d="M8 3L4 21M16 3l4 18M12 4v3M12 11v3M12 18v3"/>' }
 };
 function catIcon(cat) {
   const l = LOOK[cat.id] || { color: '#ff4fa3', icon: '<path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>' };
