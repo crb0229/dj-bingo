@@ -468,8 +468,7 @@ window.CATEGORIES = [
       ['Moonlight in Vermont', 'Frank Sinatra'], ['Louisiana Saturday Night', 'Mel McDaniel'],
       ['Jersey Girl', 'Bruce Springsteen'], ['Private Idaho', "The B-52's"], ['Delaware', 'Perry Como'],
       ['Rhode Island Is Famous for You', 'Blossom Dearie'], ['Dakota', 'Stereophonics'],
-      ['Missouri Waltz', 'Bing Crosby'],
-      ['Memphis, Tennessee', 'Chuck Berry']
+      ['Missouri Waltz', 'Bing Crosby']
     ]
   }
 ];
