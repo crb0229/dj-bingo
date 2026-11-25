@@ -410,5 +410,66 @@ window.CATEGORIES = [
       ["Honey, I'm Good.", 'Andy Grammer'], ['Hold My Hand', 'Hootie & the Blowfish'],
       ['Hard Habit to Break', 'Chicago']
     ]
+  },
+  {
+    id: 'U', name: 'City Limits', start: 40,
+    query: s => s[0] + ' ' + s[1],
+    songs: [
+      ['New York, New York', 'Frank Sinatra'], ['New York State of Mind', 'Billy Joel'],
+      ['Englishman in New York', 'Sting'], ['Autumn in New York', 'Ella Fitzgerald & Louis Armstrong'],
+      ['Viva Las Vegas', 'Elvis Presley'], ['Kansas City', 'Wilbert Harrison'],
+      ['Sweet Home Chicago', 'The Blues Brothers'], ['My Kind of Town (Chicago Is)', 'Frank Sinatra'],
+      ['Philadelphia Freedom', 'Elton John'], ['Streets of Philadelphia', 'Bruce Springsteen'],
+      ['Do You Know the Way to San Jose', 'Dionne Warwick'],
+      ['San Francisco (Be Sure to Wear Flowers in Your Hair)', 'Scott McKenzie'],
+      ['I Left My Heart in San Francisco', 'Tony Bennett'], ['Galveston', 'Glen Campbell'],
+      ['Amarillo by Morning', 'George Strait'], ['By the Time I Get to Phoenix', 'Glen Campbell'],
+      ['Wichita Lineman', 'Glen Campbell'], ['Allentown', 'Billy Joel'], ['Detroit Rock City', 'KISS'],
+      ['Detroit City', 'Bobby Bare'], ['Memphis, Tennessee', 'Chuck Berry'], ['Walking in Memphis', 'Marc Cohn'],
+      ['Nashville Cats', "The Lovin' Spoonful"], ['London Calling', 'The Clash'],
+      ['Werewolves of London', 'Warren Zevon'], ['Waterloo', 'ABBA'], ['Rio', 'Duran Duran'],
+      ['Hollywood Nights', 'Bob Seger'], ['One Night in Bangkok', 'Murray Head'], ['Budapest', 'George Ezra'],
+      ['Istanbul (Not Constantinople)', 'They Might Be Giants'], ['Chattanooga Choo Choo', 'Glenn Miller'],
+      ['Tulsa Time', 'Don Williams'], ['Twenty-Four Hours from Tulsa', 'Gene Pitney'],
+      ['Abilene', 'George Hamilton IV'], ['El Paso', 'Marty Robbins'], ['Luckenbach, Texas', 'Waylon Jennings'],
+      ['Kokomo', 'The Beach Boys'], ['Winchester Cathedral', 'The New Vaudeville Band'],
+      ['Cleveland Rocks', 'The Presidents of the United States of America'],
+      ['Meet Me in St. Louis, Louis', 'Judy Garland'], ['The Battle of New Orleans', 'Johnny Horton'],
+      ['City of New Orleans', 'Arlo Guthrie'], ['Houston', 'Dean Martin'], ['Miami', 'Will Smith'],
+      ['L.A. Woman', 'The Doors'], ["(I've Got a Gal in) Kalamazoo", 'Glenn Miller'],
+      ['Saginaw, Michigan', 'Lefty Frizzell'], ['Jackson', 'Johnny Cash & June Carter'],
+      ['Tallahassee Lassie', 'Freddy Cannon'], ['Vienna', 'Billy Joel'],
+      ['Streets of Bakersfield', 'Dwight Yoakam & Buck Owens'], ['Santa Monica', 'Everclear'],
+      ['Malibu', 'Miley Cyrus'], ['San Antonio Rose', 'Bob Wills'], ['Austin', 'Blake Shelton'],
+      ['Paris', 'The Chainsmokers']
+    ]
+  },
+  {
+    id: 'S', name: 'State Lines', start: 40,
+    query: s => s[0] + ' ' + s[1],
+    songs: [
+      ['Sweet Home Alabama', 'Lynyrd Skynyrd'], ['Stars Fell on Alabama', 'Ella Fitzgerald & Louis Armstrong'],
+      ['Georgia on My Mind', 'Ray Charles'], ['Midnight Train to Georgia', 'Gladys Knight & the Pips'],
+      ['Rainy Night in Georgia', 'Brook Benton'], ['The Night the Lights Went Out in Georgia', 'Vicki Lawrence'],
+      ["California Dreamin'", 'The Mamas & the Papas'], ['California Girls', 'The Beach Boys'],
+      ['Hotel California', 'Eagles'], ['California Sun', 'The Rivieras'], ['Going to California', 'Led Zeppelin'],
+      ['It Never Rains in Southern California', 'Albert Hammond'], ['Kentucky Woman', 'Neil Diamond'],
+      ['Blue Moon of Kentucky', 'Bill Monroe'], ['Kentucky Rain', 'Elvis Presley'],
+      ['My Old Kentucky Home', 'Stephen Foster'], ['Tennessee Waltz', 'Patti Page'],
+      ['Tennessee Whiskey', 'Chris Stapleton'], ['Tennessee Flat Top Box', 'Johnny Cash'],
+      ['Deep in the Heart of Texas', 'Gene Autry'], ["All My Ex's Live in Texas", 'George Strait'],
+      ['God Blessed Texas', 'Little Texas'], ['The Yellow Rose of Texas', 'Mitch Miller'],
+      ['Waltz Across Texas', 'Ernest Tubb'], ['Oklahoma!', 'Oklahoma! cast'],
+      ['Carolina in My Mind', 'James Taylor'], ['Carolina Girls', 'General Johnson & Chairmen of the Board'],
+      ['Arizona', 'Mark Lindsay'], ['Mississippi Queen', 'Mountain'], ['Mississippi Girl', 'Faith Hill'],
+      ['Massachusetts', 'Bee Gees'], ['Pennsylvania 6-5000', 'Glenn Miller'], ['Indiana Wants Me', 'R. Dean Taylor'],
+      ['Back Home Again in Indiana', 'Louis Armstrong'], ['Wild Montana Skies', 'John Denver & Emmylou Harris'],
+      ['North to Alaska', 'Johnny Horton'], ['Blue Hawaii', 'Elvis Presley'],
+      ['Moonlight in Vermont', 'Frank Sinatra'], ['Louisiana Saturday Night', 'Mel McDaniel'],
+      ['Jersey Girl', 'Bruce Springsteen'], ['Private Idaho', "The B-52's"], ['Delaware', 'Perry Como'],
+      ['Rhode Island Is Famous for You', 'Blossom Dearie'], ['Dakota', 'Stereophonics'],
+      ['Missouri Waltz', 'Bing Crosby'],
+      ['Memphis, Tennessee', 'Chuck Berry']
+    ]
   }
 ];
