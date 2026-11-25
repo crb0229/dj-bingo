@@ -519,5 +519,53 @@ window.CATEGORIES = [
       ['Dirt Road Anthem', 'Jason Aldean'], ['Boulevard', 'Jackson Browne'],
       ['Two Lane Highway', 'Pure Prairie League']
     ]
+  },
+  {
+    id: 'W', name: 'Around the World', start: 40,
+    query: s => s[0] + ' ' + s[1],
+    songs: [
+      ['Africa', 'Toto'], ['Waka Waka (This Time for Africa)', 'Shakira'], ['Back in the U.S.S.R.', 'The Beatles'],
+      ['Born in the U.S.A.', 'Bruce Springsteen'], ['Party in the U.S.A.', 'Miley Cyrus'],
+      ['Living in America', 'James Brown'], ['America', 'Neil Diamond'], ['Made in America', 'Toby Keith'],
+      ['American Pie', 'Don McLean'], ['American Woman', 'The Guess Who'], ['American Girl', 'Tom Petty'],
+      ['American Honey', 'Lady A'], ['Big in Japan', 'Alphaville'], ['China Grove', 'The Doobie Brothers'],
+      ['China Girl', 'David Bowie'], ['Mexico', 'James Taylor'], ['Mexican Radio', 'Wall of Voodoo'],
+      ['Mexicali Rose', 'Gene Autry'], ['Jamaica Farewell', 'Harry Belafonte'],
+      ['Jamaica Say You Will', 'Jackson Browne'], ['Brazil', 'Frank Sinatra'],
+      ["Don't Cry for Me Argentina", 'Madonna'], ['England Swings', 'Roger Miller'], ['Panama', 'Van Halen'],
+      ['Cuba', 'Gibson Brothers'], ['Cuban Pete', 'Jim Carrey'], ['Walk Like an Egyptian', 'The Bangles'],
+      ['Russians', 'Sting'], ['Spanish Flea', 'Herb Alpert & the Tijuana Brass'], ['Spanish Harlem', 'Ben E. King'],
+      ['Spanish Eyes', 'Al Martino'], ['Spanish Stroll', 'Mink DeVille'], ['Canadian Sunset', 'Andy Williams'],
+      ['Scenes from an Italian Restaurant', 'Billy Joel'], ['Mambo Italiano', 'Rosemary Clooney'],
+      ['The Irish Rover', 'The Pogues & The Dubliners'], ['Norwegian Wood', 'The Beatles'],
+      ['Arabian Nights', 'Aladdin cast'], ['Bahama Mama', 'Boney M.'], ['Holiday in Spain', 'Counting Crows'],
+      ['Japanese Boy', 'Aneka'], ['Europa', 'Santana'], ['Africa Unite', 'Bob Marley & the Wailers'],
+      ['Lebanon', 'The Human League'], ['Australia', 'Manic Street Preachers']
+    ]
+  },
+  {
+    id: 'R', name: 'Hit the Road', start: 40,
+    query: s => s[0] + ' ' + s[1],
+    songs: [
+      ['Route 66', 'Nat King Cole'], ['Highway to Hell', 'AC/DC'], ['Ventura Highway', 'America'],
+      ['Life Is a Highway', 'Tom Cochrane'], ['Highway Star', 'Deep Purple'], ['Hit the Road Jack', 'Ray Charles'],
+      ['On the Road Again', 'Willie Nelson'], ['Take Me Home, Country Roads', 'John Denver'],
+      ['The Long and Winding Road', 'The Beatles'], ['Penny Lane', 'The Beatles'],
+      ['Thunder Road', 'Bruce Springsteen'], ['Goodbye Yellow Brick Road', 'Elton John'],
+      ['Electric Avenue', 'Eddy Grant'], ['Baker Street', 'Gerry Rafferty'],
+      ['Dancing in the Street', 'Martha and the Vandellas'], ['Copperhead Road', 'Steve Earle'],
+      ['Boulevard of Broken Dreams', 'Green Day'], ['Positively 4th Street', 'Bob Dylan'],
+      ['Highway 61 Revisited', 'Bob Dylan'], ['Lost Highway', 'Hank Williams'], ['Road to Nowhere', 'Talking Heads'],
+      ['King of the Road', 'Roger Miller'], ['Old Town Road', 'Lil Nas X ft. Billy Ray Cyrus'],
+      ["Highway Don't Care", 'Tim McGraw ft. Taylor Swift'], ['Highwayman', 'The Highwaymen'],
+      ['Highway 20 Ride', 'Zac Brown Band'], ['Roadhouse Blues', 'The Doors'], ['Easy Street', 'Annie cast'],
+      ['Dead End Street', 'The Kinks'], ['Street Life', 'The Crusaders'], ['Streets of Laredo', 'Marty Robbins'],
+      ['Main Street', 'Bob Seger'], ['Avenues and Alleyways', 'Tony Christie'], ['Route 101', 'Herb Alpert'],
+      ['Interstate Love Song', 'Stone Temple Pilots'], ['Freeway of Love', 'Aretha Franklin'],
+      ['Crossroads', 'Cream'], ['Down the Road', 'Kenny Chesney'], ['Dirt Road Anthem', 'Jason Aldean'],
+      ['Highway 40 Blues', 'Ricky Skaggs'], ['Desolation Row', 'Bob Dylan'], ['Highway Song', 'Blackfoot'],
+      ['Road Runner', 'Bo Diddley'], ['Lonely Street', 'Andy Williams'], ['Shakedown Street', 'Grateful Dead'],
+      ['Rocky Road to Dublin', 'The Dubliners']
+    ]
   }
 ];
